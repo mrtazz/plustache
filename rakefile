@@ -1,0 +1,50 @@
+# rakefile for compiling plustache
+
+SRC_FILES = ["src/main.cpp", "src/template.cpp"]
+OBJ_FILES = ["main.o", "template.o"]
+TEST_SRC = ["tests/tests.cpp", "src/template.cpp"]
+TEST_OBJ = ["tests.o", "template.o"]
+INCLUDE_DIRS = ["include"]
+OUTFILE = "plustache"
+CC = "g++"
+LD = "g++"
+CCFLAGS = ["-O3 ","-wall ", "-I #{INCLUDE_DIRS.join(" ")} "]
+LDFLAGS = [" -o #{OUTFILE}"]
+
+task :default => [:link, :clobber]
+
+desc "compile the sources"
+task :compile do
+  sh "#{CC} #{CCFLAGS.join(" ")} -c #{SRC_FILES.join(" ")}"
+end
+
+desc "link the object files together"
+task :link => [:compile] do
+  sh "#{LD} #{LDFLAGS.join(" ")} #{OBJ_FILES.join(" ")}"
+end
+
+# unit testing tasks
+
+desc "execute unit tests"
+
+
+desc "compile sources for unit testing"
+task :testcompile do
+  sh "#{CC} #{CCFLAGS.join(" ")} -c #{TEST_SRC.join(" ")}"
+end
+
+desc "link sources for unit testing"
+task :testlink do
+  sh "#{LD} #{CCFLAGS.join(" ")} -c #{TEST_OBJ.join(" ")}"
+end
+
+# cleanup tasks
+
+desc "clean as an alias for clobber"
+task :clean => [:clobber] do
+end
+
+desc "clobber removes all generated files"
+task :clobber do
+  sh "rm #{OBJ_FILES.join(" ")} #{TEST_OBJ.join(" ")}"
+end

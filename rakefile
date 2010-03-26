@@ -1,15 +1,20 @@
 # rakefile for compiling plustache
 
+require 'rake/clean'
+
 SRC_FILES = ["src/main.cpp", "src/template.cpp"]
 OBJ_FILES = ["main.o", "template.o"]
-TEST_SRC = ["tests/tests.cpp", "src/template.cpp"]
-TEST_OBJ = ["tests.o", "template.o"]
-INCLUDE_DIRS = ["include"]
+TEST_SRC = ["tests/tests.cpp", "src/template.cpp",
+            "tests/test_simple_plustache.cpp"]
+TEST_OBJ = ["tests.o", "template.o","test_simple_plustache.o"]
+INCLUDE_DIRS = ["include", "/usr/local/homebrew/Cellar/gtest/1.4.0/include"]
 OUTFILE = "plustache"
+OUTFILE_TEST = "plustache_test"
 CC = "g++"
 LD = "g++"
-CCFLAGS = ["-O3 ","-wall ", "-I #{INCLUDE_DIRS.join(" ")} "]
+CCFLAGS = ["-O3 ","-wall ", "-I #{INCLUDE_DIRS.join(" -I")} "]
 LDFLAGS = [" -o #{OUTFILE}"]
+LD_TEST_FLAGS = ["-L/usr/local/homebrew/Cellar/gtest/1.4.0/lib"]
 
 task :default => [:link, :clobber]
 
@@ -24,9 +29,10 @@ task :link => [:compile] do
 end
 
 # unit testing tasks
-
 desc "execute unit tests"
-
+task :test => [:testlink] do
+  sh "./#{OUTFILE_TEST}"
+end
 
 desc "compile sources for unit testing"
 task :testcompile do
@@ -34,17 +40,11 @@ task :testcompile do
 end
 
 desc "link sources for unit testing"
-task :testlink do
-  sh "#{LD} #{CCFLAGS.join(" ")} -c #{TEST_OBJ.join(" ")}"
+task :testlink => [:testcompile] do
+  sh "#{LD} -o #{OUTFILE_TEST} #{TEST_OBJ.join(" ")} \
+#{LD_TEST_FLAGS.join(" ")} -lgtest"
 end
 
 # cleanup tasks
-
-desc "clean as an alias for clobber"
-task :clean => [:clobber] do
-end
-
-desc "clobber removes all generated files"
-task :clobber do
-  sh "rm #{OBJ_FILES.join(" ")} #{TEST_OBJ.join(" ")}"
-end
+CLEAN.include("*.o")
+CLOBBER.include("*.o", OUTFILE, OUTFILE_TEST)

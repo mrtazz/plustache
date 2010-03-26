@@ -6,13 +6,21 @@
  * @date 2010-03-12
  */
 
-#include <stdio.h>
+#include <iostream>
+#include <string>
+#include <map>
+
+using namespace std;
+
+/** typedefs */
+typedef map<string, string> context;
 
 class template_t {
 public:
     template_t ();
-    virtual ~template_t ();
+    ~template_t ();
     void hello_world();
+    string render(string tmplate, context ctx);
 
 private:
     /* data */

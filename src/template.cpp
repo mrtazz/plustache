@@ -7,9 +7,6 @@
  */
 
 #include <template.hpp>
-#include <iostream>
-
-using namespace std;
 
 void template_t::hello_world()
 {
@@ -24,4 +21,10 @@ template_t::template_t()
 template_t::~template_t()
 {
 
+}
+
+string template_t::render(string tmplate, context ctx)
+{
+    string ret = "";
+    return ret;
 }

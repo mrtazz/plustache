@@ -16,6 +16,9 @@ void template_t::hello_world()
 template_t::template_t()
 {
 
+    otag = "{{";
+    ctag = "}}";
+    tag.assign(otag + "\\(.*\\)" + ctag, boost::regex_constants::sed);
 }
 
 template_t::~template_t()

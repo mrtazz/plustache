@@ -7,14 +7,16 @@ OBJ_FILES = ["main.o", "template.o"]
 TEST_SRC = ["tests/tests.cpp", "src/template.cpp",
             "tests/test_simple_plustache.cpp"]
 TEST_OBJ = ["tests.o", "template.o","test_simple_plustache.o"]
-INCLUDE_DIRS = ["include", "/usr/local/homebrew/Cellar/gtest/1.4.0/include"]
+INCLUDE_DIRS = ["include", "/usr/local/homebrew/Cellar/gtest/1.4.0/include",
+                "/usr/local/homebrew/Cellar/boost/1.42.0/include"]
 OUTFILE = "plustache"
 OUTFILE_TEST = "plustache_test"
 CC = "g++"
 LD = "g++"
-CCFLAGS = ["-O3 ","-wall ", "-I #{INCLUDE_DIRS.join(" -I")} "]
+CCFLAGS = ["-O3","-wall", "-I #{INCLUDE_DIRS.join(" -I")}"]
 LDFLAGS = [" -o #{OUTFILE}"]
-LD_TEST_FLAGS = ["-L/usr/local/homebrew/Cellar/gtest/1.4.0/lib"]
+LD_TEST_FLAGS = ["-L/usr/local/homebrew/Cellar/gtest/1.4.0/lib",
+                 "-L/usr/local/homebrew/Cellar/boost/1.42.0/lib"]
 
 task :default => [:link, :clobber]
 
@@ -42,7 +44,7 @@ end
 desc "link sources for unit testing"
 task :testlink => [:testcompile] do
   sh "#{LD} -o #{OUTFILE_TEST} #{TEST_OBJ.join(" ")} \
-#{LD_TEST_FLAGS.join(" ")} -lgtest"
+#{LD_TEST_FLAGS.join(" ")} -lgtest -lboost_regex-mt"
 end
 
 # cleanup tasks

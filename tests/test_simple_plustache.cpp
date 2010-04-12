@@ -7,7 +7,7 @@ class SimpleTest : public ::testing::Test
  protected:
     string result;
     string template_string;
-    context ctx;
+    map<string, string> ctx;
 
     SimpleTest()
     {

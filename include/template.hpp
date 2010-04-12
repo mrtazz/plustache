@@ -9,11 +9,11 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <boost/regex.hpp>
+
+#include <context.hpp>
 
 using namespace std;
-
-/** typedefs */
-typedef map<string, string> context;
 
 class template_t {
 public:
@@ -21,7 +21,11 @@ public:
     ~template_t ();
     void hello_world();
     string render(string tmplate, context ctx);
+    string render(string tmplate, map<string, string> ctx);
 
 private:
-    /* data */
+    /* opening and closing tags */
+    string otag;
+    string ctag;
+    boost::regex tag;
 };

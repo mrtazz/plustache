@@ -28,3 +28,13 @@ string template_t::render(string tmplate, context ctx)
     string ret = "";
     return ret;
 }
+
+string template_t::render(string tmplate, map<string, string> ctx)
+{
+    string ret = "";
+    string replace_string(ctx["\\1"]);
+    ret = regex_replace(tmplate, tag, replace_string,
+                        boost::match_default | boost::format_sed);
+    return ret;
+}
+

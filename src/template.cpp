@@ -15,10 +15,9 @@ void template_t::hello_world()
 
 template_t::template_t()
 {
-
-    otag = "{{";
-    ctag = "}}";
-    tag.assign(otag + "\\(.*\\)" + ctag, boost::regex_constants::sed);
+    otag = "\\{\\{";
+    ctag = "\\}\\}";
+    tag.assign(otag + "(.+)" + ctag);
 }
 
 template_t::~template_t()
@@ -35,9 +34,15 @@ string template_t::render(string tmplate, context ctx)
 string template_t::render(string tmplate, map<string, string> ctx)
 {
     string ret = "";
-    string replace_string(ctx["\\1"]);
-    ret = regex_replace(tmplate, tag, replace_string,
-                        boost::match_default | boost::format_sed);
+    boost::cmatch matches;
+    if (boost::regex_search(tmplate.c_str(), matches, tag,
+                            boost::match_default | boost::format_all))
+    {
+        string key(matches[1].first, matches[1].second);
+        string repl = ctx[key];
+        ret = regex_replace(tmplate, tag, repl,
+                        boost::match_default | boost::format_all);
+    }
     return ret;
 }
 

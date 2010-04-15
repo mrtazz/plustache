@@ -5,8 +5,10 @@ require 'rake/clean'
 SRC_FILES = ["src/main.cpp", "src/template.cpp"]
 OBJ_FILES = ["main.o", "template.o"]
 TEST_SRC = ["tests/tests.cpp", "src/template.cpp",
-            "tests/test_simple_plustache.cpp"]
-TEST_OBJ = ["tests.o", "template.o","test_simple_plustache.o"]
+            "tests/test_simple_plustache.cpp",
+            "tests/test_multiple_plustache.cpp"]
+TEST_OBJ = ["tests.o", "template.o","test_simple_plustache.o",
+            "test_multiple_plustache.o"]
 INCLUDE_DIRS = ["include", "/usr/local/homebrew/Cellar/gtest/1.4.0/include",
                 "/usr/local/homebrew/Cellar/boost/1.42.0/include"]
 OUTFILE = "plustache"

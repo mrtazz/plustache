@@ -35,6 +35,6 @@ class SimpleTest : public ::testing::Test
 TEST_F(SimpleTest, TestSimpleMustache)
 {
     const string expected = "text replaced text";
-    EXPECT_EQ(result, expected);
+    EXPECT_EQ(expected, result);
 }
 

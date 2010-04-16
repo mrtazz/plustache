@@ -38,6 +38,6 @@ TEST_F(MultipleTest, TestMultipleMustache)
 {
     string expected = "Hi I am Daniel.\n";
           expected += "I like turtles.";
-    EXPECT_EQ(result, expected);
+    EXPECT_EQ(expected, result);
 }
 

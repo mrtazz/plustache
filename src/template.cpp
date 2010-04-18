@@ -39,12 +39,15 @@ string template_t::render(string tmplate, map<string, string> ctx)
     match_results<std::string::const_iterator> matches;
     start = tmplate.begin();
     end = tmplate.end();
-    while (regex_search(start, end, matches, tag,
-                            match_default | format_all))
+    while (regex_search(start, end, matches, tag, match_default | format_all))
     {
         string key(matches[2].first, matches[2].second);
-        string text(start,matches[0].second);
-        ret += regex_replace(text, tag, ctx[key], match_default | format_all);
+        string text(start, matches[0].second);
+        string repl;
+        try { repl.assign(ctx[key]); }
+        catch(int i) { repl.assign(""); }
+        if (matches[1] == "!") repl.assign("");
+        ret += regex_replace(text, tag, repl, match_default | format_all);
         rest.assign(matches[0].second, end);
         start = matches[0].second;
     }

@@ -21,8 +21,8 @@ class MultipleTest : public ::testing::Test
     virtual void SetUp()
     {
         template_string = "<title>{{title}}</title>\n";
-        template_string += "Hi I am {{name}}.\n";
-        template_string += "I like {{pet}}.";
+        template_string += "Hi I am {{name}}{{lastname}}.\n";
+        template_string += "I like {{pet}}.{{!comment}}";
         ctx["title"] = "Multiple Mustaches";
         ctx["name"] = "Daniel";
         ctx["pet"] = "turtles";

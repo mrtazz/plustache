@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <string>
+#include <boost/algorithm/string/trim.hpp>
 #include <map>
 #include <boost/regex.hpp>
 
@@ -29,4 +30,9 @@ private:
     string otag;
     string ctag;
     regex tag;
+    regex section;
+    string render_tags(string tmplate, context ctx);
+    string render_tags(string tmplate, map<string, string> ctx);
+    string render_sections(string tmplate, context ctx);
+    string render_sections(string tmplate, map<string, string> ctx);
 };

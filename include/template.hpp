@@ -14,6 +14,7 @@
 #include <context.hpp>
 
 using namespace std;
+using namespace boost;
 
 class template_t {
 public:
@@ -27,5 +28,5 @@ private:
     /* opening and closing tags */
     string otag;
     string ctag;
-    boost::regex tag;
+    regex tag;
 };

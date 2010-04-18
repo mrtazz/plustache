@@ -46,9 +46,8 @@ string template_t::render(string tmplate, map<string, string> ctx)
         string repl = ctx[key];
         string text(start,matches[0].second);
         ret += regex_replace(text, tag, repl, match_default | format_all);
+        rest.assign(matches[0].second, end);
         start = matches[0].second;
-        string foo(matches[0].second, end);
-        rest = foo;
     }
     ret += rest;
     return ret;

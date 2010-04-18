@@ -2,53 +2,74 @@
 
 require 'rake/clean'
 
-SRC_FILES = ["src/main.cpp", "src/template.cpp"]
-OBJ_FILES = ["main.o", "template.o"]
-TEST_SRC = ["tests/tests.cpp", "src/template.cpp",
-            "tests/test_simple_plustache.cpp",
-            "tests/test_multiple_plustache.cpp"]
-TEST_OBJ = ["tests.o", "template.o","test_simple_plustache.o",
-            "test_multiple_plustache.o"]
+# plustache files
+SRC_FILES = FileList["src/template.cpp", "src/context.cpp"]
+OBJ_FILES = FileList["build/*.o"]
+# files for the executable
+BIN_SRC = "src/main.cpp"
+BIN_OBJ = "build/main.o"
+# files for unit testing
+TEST_SRC = FileList["tests/*.cpp"]
+TEST_OBJ = FileList["tests/*.o"]
+# include dirs
 INCLUDE_DIRS = ["include", "/usr/local/homebrew/Cellar/gtest/1.4.0/include",
                 "/usr/local/homebrew/Cellar/boost/1.42.0/include"]
-OUTFILE = "plustache"
-OUTFILE_TEST = "plustache_test"
+# executables
+OUTFILE = "bin/plustache"
+OUTFILE_TEST = "bin/plustache_tests"
+# compiler/linker stuff
 CC = "g++"
 LD = "g++"
 CCFLAGS = ["-O3","-wall", "-I #{INCLUDE_DIRS.join(" -I")}"]
-LDFLAGS = [" -o #{OUTFILE}"]
+LDFLAGS = ["-L/usr/local/homebrew/Cellar/boost/1.42.0/lib"]
 LD_TEST_FLAGS = ["-L/usr/local/homebrew/Cellar/gtest/1.4.0/lib",
                  "-L/usr/local/homebrew/Cellar/boost/1.42.0/lib"]
 
-task :default => [:link, :clobber]
+task :default => [:link, :clean]
 
-desc "compile the sources"
-task :compile do
-  sh "#{CC} #{CCFLAGS.join(" ")} -c #{SRC_FILES.join(" ")}"
+desc "compile the main sources"
+directory "build"
+task :compile => "build" do
+  SRC_FILES.each do |src|
+    object = File.basename(src, ".cpp") + ".o"
+    sh "#{CC} #{CCFLAGS.join(" ")} -c #{src} -o build/#{object}"
+  end
 end
 
 desc "link the object files together"
-task :link => [:compile] do
-  sh "#{LD} #{LDFLAGS.join(" ")} #{OBJ_FILES.join(" ")}"
+directory "bin"
+task :link => [:compile_executable, "bin"] do
+  sh "#{LD} -o #{OUTFILE} #{OBJ_FILES.join(" ")} #{LDFLAGS.join(" ")} \
+-lboost_regex-mt"
+end
+
+desc "compile the sources for the executable"
+directory "build"
+task :compile_executable => [:compile, "build"] do
+  sh "#{CC} #{CCFLAGS.join(" ")} -c #{BIN_SRC} -o #{BIN_OBJ}"
 end
 
 # unit testing tasks
 desc "execute unit tests"
-task :test => [:testlink] do
+task :test => [:linktests] do
   sh "./#{OUTFILE_TEST}"
 end
 
 desc "compile sources for unit testing"
-task :testcompile do
-  sh "#{CC} #{CCFLAGS.join(" ")} -c #{TEST_SRC.join(" ")}"
+task :compiletests => [:compile] do
+  TEST_SRC.each do |src|
+    object = File.basename(src, ".cpp") + ".o"
+    sh "#{CC} #{CCFLAGS.join(" ")} -c #{src} -o tests/#{object}"
+  end
 end
 
 desc "link sources for unit testing"
-task :testlink => [:testcompile] do
-  sh "#{LD} -o #{OUTFILE_TEST} #{TEST_OBJ.join(" ")} \
-#{LD_TEST_FLAGS.join(" ")} -lgtest -lboost_regex-mt"
+directory "bin"
+task :linktests => [:compiletests, "bin"] do
+  sh "#{LD} -o #{OUTFILE_TEST} #{OBJ_FILES.join(" ")} \
+#{TEST_OBJ.join(" ")} #{LD_TEST_FLAGS.join(" ")} -lgtest -lboost_regex-mt"
 end
 
 # cleanup tasks
-CLEAN.include("*.o")
-CLOBBER.include("*.o", OUTFILE, OUTFILE_TEST)
+CLEAN.include("build", "tests/*.o")
+CLOBBER.include("build", "bin", "tests/*.o")

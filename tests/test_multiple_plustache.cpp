@@ -7,6 +7,7 @@ class MultipleTest : public ::testing::Test
  protected:
     string result;
     string template_string;
+    string expected;
     map<string, string> ctx;
 
     MultipleTest()
@@ -19,8 +20,10 @@ class MultipleTest : public ::testing::Test
 
     virtual void SetUp()
     {
-        template_string = "Hi I am {{name}}.\n";
+        template_string = "<title>{{title}}</title>\n";
+        template_string += "Hi I am {{name}}.\n";
         template_string += "I like {{pet}}.";
+        ctx["title"] = "Multiple Mustaches";
         ctx["name"] = "Daniel";
         ctx["pet"] = "turtles";
         template_t t;
@@ -36,8 +39,9 @@ class MultipleTest : public ::testing::Test
 // Tests that a simple mustache tag is replaced
 TEST_F(MultipleTest, TestMultipleMustache)
 {
-    string expected = "Hi I am Daniel.\n";
-          expected += "I like turtles.";
+    expected = "<title>Multiple Mustaches</title>\n";
+    expected += "Hi I am Daniel.\n";
+    expected += "I like turtles.";
     EXPECT_EQ(expected, result);
 }
 

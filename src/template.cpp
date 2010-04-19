@@ -2,17 +2,13 @@
  * @file template.cpp
  * @brief plustache template
  * @author Daniel Schauenberg <d@unwiredcouch.com>
- * @version 0.1
- * @date 2010-03-12
  */
 
 #include <template.hpp>
 
-void template_t::hello_world()
-{
-    cout << "Hello World!\n";
-}
-
+/**
+ * @brief constructor, basically only assign regex
+ */
 template_t::template_t()
 {
     otag = "\\{\\{";
@@ -27,12 +23,28 @@ template_t::~template_t()
 
 }
 
+/**
+ * @brief method to render tags with given context object
+ *
+ * @param tmplate template string
+ * @param ctx context object
+ *
+ * @return rendered string
+ */
 string template_t::render_tags(string tmplate, context ctx)
 {
     string ret = "";
     return ret;
 }
 
+/**
+ * @brief method to render tags with a given map
+ *
+ * @param tmplate template string to render
+ * @param ctx map of values
+ *
+ * @return rendered string
+ */
 string template_t::render_tags(string tmplate, map<string, string> ctx)
 {
     string ret = "";
@@ -61,12 +73,28 @@ string template_t::render_tags(string tmplate, map<string, string> ctx)
     return ret;
 }
 
+/**
+ * @brief method to render sections with a given context object
+ *
+ * @param tmplate template string to render
+ * @param ctx context object
+ *
+ * @return rendered string
+ */
 string template_t::render_sections(string tmplate, context ctx)
 {
     string ret = "";
     return ret;
 }
 
+/**
+ * @brief method to render sections with a given map
+ *
+ * @param tmplate template string to render
+ * @param ctx map of values
+ *
+ * @return rendered string
+ */
 string template_t::render_sections(string tmplate, map<string, string> ctx)
 {
     string ret = "";
@@ -99,6 +127,14 @@ string template_t::render_sections(string tmplate, map<string, string> ctx)
     return ret;
 }
 
+/**
+ * @brief method for rendering a template
+ *
+ * @param tmplate template to render
+ * @param ctx context object
+ *
+ * @return rendered string
+ */
 string template_t::render(string tmplate, context ctx)
 {
     string first = template_t::render_sections(tmplate, ctx);
@@ -106,6 +142,14 @@ string template_t::render(string tmplate, context ctx)
     return second;
 }
 
+/**
+ * @brief mehtod for rendering a template
+ *
+ * @param tmplate template to render
+ * @param ctx map of values
+ *
+ * @return rendered string
+ */
 string template_t::render(string tmplate, map<string, string> ctx)
 {
     string first = template_t::render_sections(tmplate, ctx);

@@ -18,7 +18,6 @@ will be implemented, when I figure out what's the best way to do it.
 * Partials (if possible)
 * Values in an object instead of hash only
 * plustache cli command
-* read template from file
 
 ## Dependencies
 * google test for unit testing

@@ -130,31 +130,62 @@ string template_t::render_sections(string tmplate, map<string, string> ctx)
 /**
  * @brief method for rendering a template
  *
- * @param tmplate template to render
+ * @param tmplate template to render as raw string or file path
  * @param ctx context object
  *
  * @return rendered string
  */
 string template_t::render(string tmplate, context ctx)
 {
-    string first = template_t::render_sections(tmplate, ctx);
+    // string to hold the template
+    string tmp = "";
+    ifstream file(tmplate.c_str());
+    // true if it was a valid file path
+    if (file.is_open())
+    {
+        tmp.assign((istreambuf_iterator<char>(file)),
+                    istreambuf_iterator<char>());
+        file.close();
+    }
+    // tmplate was maybe a complete template and no file path
+    else
+    {
+        tmp = tmplate;
+    }
+
+    string first = template_t::render_sections(tmp, ctx);
     string second = template_t::render_tags(first, ctx);
     return second;
 }
 
 /**
- * @brief mehtod for rendering a template
+ * @brief method for rendering a template
  *
- * @param tmplate template to render
+ * @param tmplate template to render as raw string or filepath
  * @param ctx map of values
  *
  * @return rendered string
  */
 string template_t::render(string tmplate, map<string, string> ctx)
 {
-    string first = template_t::render_sections(tmplate, ctx);
+    // string to hold the template
+    string tmp = "";
+    ifstream file(tmplate.c_str());
+    // true if it was a valid file path
+    if (file.is_open())
+    {
+        tmp.assign((istreambuf_iterator<char>(file)),
+                    istreambuf_iterator<char>());
+        file.close();
+    }
+    // tmplate was maybe a complete template and no file path
+    else
+    {
+        tmp = tmplate;
+    }
+
+    string first = template_t::render_sections(tmp, ctx);
     string second = template_t::render_tags(first, ctx);
     return second;
 }
-
 

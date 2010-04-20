@@ -5,6 +5,8 @@
  */
 
 #include <iostream>
+#include <fstream>
+#include <streambuf>
 #include <string>
 #include <boost/algorithm/string/trim.hpp>
 #include <map>

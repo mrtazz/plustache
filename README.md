@@ -11,8 +11,26 @@ That is also why the supported mustache functionality is still
 very basic. More functionality
 will be implemented, when I figure out what's the best way to do it.
 
+## Usage
+Create a template:
+
+    <h1>{{title}}</h2>
+    Hi I am {{name}}.
+    I like {{thing}}.
+
+Fill the context:
+
+    map<string, string> ctx;
+    ctx["title"] = "About";
+    ctx["name"] = "Daniel";
+    ctx["thing"] = "turtles";
+
+Instantiate template class and render the template:
+
+    template_t t;
+    string result = t.render(template, ctx);
+
 ## TODO:
-* HTML escape/unescape
 * Collections in sections
 * Inverted sections
 * Partials (if possible)

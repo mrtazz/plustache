@@ -28,10 +28,14 @@ private:
     /* opening and closing tags */
     string otag;
     string ctag;
+    /* regex */
     regex tag;
     regex section;
+    regex escape_chars;
+    map<string, string> escape_lut;
     string render_tags(string tmplate, context ctx);
     string render_tags(string tmplate, map<string, string> ctx);
     string render_sections(string tmplate, context ctx);
     string render_sections(string tmplate, map<string, string> ctx);
+    string html_escape(string s);
 };

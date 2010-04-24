@@ -45,8 +45,8 @@ class HtmlEscapeTest : public ::testing::Test
         myfile_unescaped << unescaped_string;
         myfile_unescaped.close();
 
-        ctx["title"] = "<pre>\"\\&</pre>";
-        ctx["ritle"] = "<pre>\"\\&</pre>";
+        ctx["title"] = "<pre>\"\\&foo\\</pre>";
+        ctx["ritle"] = "<pre>\"\\\\&</pre>";
         template_t t;
         result_escaped_string = t.render(escaped_string, ctx);
         result_escaped_file = t.render(escaped_file, ctx);
@@ -65,28 +65,30 @@ class HtmlEscapeTest : public ::testing::Test
 // Tests that a simple mustache tag is replaced
 TEST_F(HtmlEscapeTest, TestHtmlEscapeMustacheFromString)
 {
-    string expected = "text &lt;pre&gt;&quot;&#92;&amp;&lt;/pre&gt; text\n";
-    expected += "text &lt;pre&gt;&quot;&#92;&amp;&lt;/pre&gt; text";
+    string expected = "text &lt;pre&gt;&quot;&#92;&amp;foo&#92;&lt;\
+/pre&gt; text\n";
+    expected += "text &lt;pre&gt;&quot;&#92;&#92;&amp;&lt;/pre&gt; text";
     EXPECT_EQ(expected, result_escaped_string);
 }
 
 TEST_F(HtmlEscapeTest, TestHtmlEscapeMustacheFromFile)
 {
-    string expected = "text &lt;pre&gt;&quot;&#92;&amp;&lt;/pre&gt; text\n";
-    expected += "text &lt;pre&gt;&quot;&#92;&amp;&lt;/pre&gt; text";
+    string expected = "text &lt;pre&gt;&quot;&#92;&amp;foo&#92;&lt;\
+/pre&gt; text\n";
+    expected += "text &lt;pre&gt;&quot;&#92;&#92;&amp;&lt;/pre&gt; text";
     EXPECT_EQ(expected, result_escaped_file);
 }
 
 TEST_F(HtmlEscapeTest, TestHtmlUnEscapeMustacheFromString)
 {
-    string expected = "text <pre>\"\\&</pre> text\n";
-    expected += "text <pre>\"\\&</pre> text";
+    string expected = "text <pre>\"\\&foo\\</pre> text\n";
+    expected += "text <pre>\"\\\\&</pre> text";
     EXPECT_EQ(expected, result_unescaped_string);
 }
 
 TEST_F(HtmlEscapeTest, TestHtmlUnEscapeMustacheFromFile)
 {
-    string expected = "text <pre>\"\\&</pre> text\n";
-    expected += "text <pre>\"\\&</pre> text";
+    string expected = "text <pre>\"\\&foo\\</pre> text\n";
+    expected += "text <pre>\"\\\\&</pre> text";
     EXPECT_EQ(expected, result_unescaped_file);
 }

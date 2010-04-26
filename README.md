@@ -30,6 +30,12 @@ Instantiate template class and render the template:
     template_t t;
     string result = t.render(template, ctx);
 
+Result:
+
+    <h1>About</h2>
+    Hi I am Daniel.
+    I like turtles.
+
 ## TODO:
 * Collections in sections
 * Inverted sections

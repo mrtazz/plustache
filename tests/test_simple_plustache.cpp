@@ -10,6 +10,8 @@ class SimpleTest : public ::testing::Test
     string result_string;
     string result_file;
     string template_string;
+    string result_notfound;
+    string notfound;
     map<string, string> ctx;
     string file;
 
@@ -24,6 +26,7 @@ class SimpleTest : public ::testing::Test
     virtual void SetUp()
     {
         template_string = "text {{title}} text";
+        notfound = "text {{fitle}} text";
         file = "multiple.mustache";
 
         std::ofstream myfile;
@@ -35,6 +38,7 @@ class SimpleTest : public ::testing::Test
         template_t t;
         result_string = t.render(template_string, ctx);
         result_file = t.render(file, ctx);
+        result_notfound = t.render(notfound, ctx);
     }
 
     virtual void TearDown()
@@ -55,4 +59,9 @@ TEST_F(SimpleTest, TestSimpleMustacheFromFile)
 {
     const string expected = "text replaced text";
     EXPECT_EQ(expected, result_file);
+}
+TEST_F(SimpleTest, TestSimpleNotFoundMustacheFromString)
+{
+    const string expected = "text  text";
+    EXPECT_EQ(expected, result_notfound);
 }

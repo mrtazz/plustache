@@ -14,7 +14,7 @@ will be implemented, when I figure out what's the best way to do it.
 ## Usage
 Create a template:
 
-    <h1>{{title}}</h2>
+    <h1>{{title}}</h1>
     Hi I am {{name}}.
     I like {{thing}}.
 
@@ -32,13 +32,12 @@ Instantiate template class and render the template:
 
 Result:
 
-    <h1>About</h2>
+    <h1>About</h1>
     Hi I am Daniel.
     I like turtles.
 
 ## TODO:
 * Collections in sections
-* Inverted sections
 * Partials (if possible)
 * Values in an object instead of hash only
 * plustache cli command

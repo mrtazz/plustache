@@ -24,8 +24,8 @@ template_t::template_t()
     ctag = "\\}\\}";
     // tag and section regex
     tag.assign(otag + "(#|=|&|!|>|\\{)?(.+?)(\\})?" + ctag);
-    section.assign(otag + "\\#([^\\}]*)" + ctag + "\\s*(.+?)\\s*"
-                   + otag + "/\\1"+ctag);
+    section.assign(otag + "(\\^|\\#)([^\\}]*)" + ctag + "\\s*(.+?)\\s*"
+                   + otag + "/\\2"+ctag);
 }
 
 template_t::~template_t()
@@ -160,14 +160,24 @@ string template_t::render_sections(string tmplate, map<string, string> ctx)
     while (regex_search(start, end, matches, section,
                         match_default | format_all))
     {
+        // string assignments
         string text(start, matches[0].second);
-        string key(matches[1].first, matches[1].second);
+        string key(matches[2].first, matches[2].second);
+        string modifier(matches[1]);
+        // trimming
         algorithm::trim(key);
+        algorithm::trim(modifier);
         string repl = "";
         string show = "false";
-        try { show = ctx[key]; }
-        catch(int i) { repl.assign(""); }
-        if (show == "true") repl.assign(matches[2]);
+        show = ctx[key];
+        // key miss in map means false
+        if (show == "") show = "false";
+        // inverted section?
+        if (modifier == "^" && show == "false") show = "true";
+        else if (modifier == "^" && show == "true") show = "false";
+        // assign replacement content
+        if (show == "true") repl.assign(matches[3]);
+        else repl.assign("");
         ret += regex_replace(text, section, repl, match_default | format_all);
         rest.assign(matches[0].second, end);
         start = matches[0].second;

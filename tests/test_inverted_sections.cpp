@@ -45,6 +45,7 @@ class InvertedSectionsTest : public ::testing::Test
 
         ctx["name"] = "Daniel";
         ctx["pet"] = "turtles";
+        ctx["showme"] = "true";
         ctx["stealth"] = "true";
         ctx["inverted"] = "false";
         template_t t;

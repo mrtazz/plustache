@@ -1,72 +1,82 @@
-# rakefile for compiling plustache
+# rakefile for compiling plustache and tests
 
 require 'rake/clean'
+require 'rake/loaders/makefile'
 
-# plustache files
-SRC_FILES = FileList["src/template.cpp", "src/context.cpp"]
-OBJ_FILES = FileList["build/*.o"]
-# files for the executable
-BIN_SRC = "src/main.cpp"
-BIN_OBJ = "build/main.o"
+APPLICATION = 'bin/plustache'
+TEST = 'bin/plustache_tests'
+OBJDIR = "build"
+# main plustache files
+SRC_FILES = FileList['src/template.cpp', 'src/context.cpp']
+SRC_OBJECTS = SRC_FILES.collect { |fn|
+                                  File.join(OBJDIR, File.basename(fn).ext('o'))
+                               }
 # files for unit testing
-TEST_SRC = FileList["tests/*.cpp"]
-TEST_OBJ = FileList["tests/*.o"]
+TEST_FILES = FileList["tests/*.cpp"]
+TEST_OBJECTS = TEST_FILES.collect { |fn|
+                                  File.join(OBJDIR, File.basename(fn).ext('o'))
+                                 }
+# files for the plustache binary
+BIN_FILES = FileList['src/main.cpp']
+BIN_OBJECTS = BIN_FILES.collect { |fn|
+                                  File.join(OBJDIR, File.basename(fn).ext('o'))
+                                }
+
 # include dirs
 INCLUDE_DIRS = ["include", "/usr/local/homebrew/include"]
-# executables
-OUTFILE = "bin/plustache"
-OUTFILE_TEST = "bin/plustache_tests"
+
 # compiler/linker stuff
 CC = "g++"
 LD = "g++"
 CCFLAGS = ["-O3","-wall", "-I #{INCLUDE_DIRS.join(" -I")}"]
 LDFLAGS = ["-L/usr/local/homebrew/lib"]
 
-task :default => [:link, :clean]
+# task definitions
+task :default => :test
 
-desc "compile the main sources"
-directory "build"
-task :compile => "build" do
-  SRC_FILES.each do |src|
-    object = File.basename(src, ".cpp") + ".o"
-    sh "#{CC} #{CCFLAGS.join(" ")} -c #{src} -o build/#{object}"
-  end
+desc "task for compiling and executing unit tests"
+task :test =>[TEST] do
+  sh "./#{TEST}"
 end
 
-desc "link the object files together"
+desc "task compiling plustache binary"
+task :app =>[APPLICATION] do
+  sh "./#{APPLICATION}"
+end
+
+# generate dependencies
+file '.depend.mf' do
+  sh "g++ -M -MF .depend.mf -I #{INCLUDE_DIRS.join(' -I')} \
+#{SRC_FILES} #{TEST_FILES}"
+end
+
+import ".depend.mf"
+
+# main binary rules
 directory "bin"
-task :link => [:compile_executable, "bin"] do
-  sh "#{LD} -o #{OUTFILE} #{OBJ_FILES.join(" ")} #{LDFLAGS.join(" ")} \
+file APPLICATION => ["bin"]
+file APPLICATION => SRC_OBJECTS + BIN_OBJECTS do |t|
+  sh "#{LD} #{SRC_OBJECTS} #{BIN_OBJECTS} -o #{t.name} #{LDFLAGS.join(" ")} \
 -lboost_regex-mt"
 end
 
-desc "compile the sources for the executable"
-directory "build"
-task :compile_executable => [:compile, "build"] do
-  sh "#{CC} #{CCFLAGS.join(" ")} -c #{BIN_SRC} -o #{BIN_OBJ}"
+directory "bin"
+file TEST => ["bin"]
+file TEST => SRC_OBJECTS + TEST_OBJECTS do |t|
+  sh "#{LD} #{TEST_OBJECTS} #{SRC_OBJECTS} -o #{t.name} #{LDFLAGS.join(" ")} \
+-lboost_regex-mt -lgtest"
 end
 
-# unit testing tasks
-desc "execute unit tests"
-task :test => [:linktests] do
-  sh "./#{OUTFILE_TEST}"
-end
-
-desc "compile sources for unit testing"
-task :compiletests => [:compile] do
-  TEST_SRC.each do |src|
-    object = File.basename(src, ".cpp") + ".o"
-    sh "#{CC} #{CCFLAGS.join(" ")} -c #{src} -o tests/#{object}"
+# compile rules for object files
+directory OBJDIR
+(TEST_FILES+SRC_FILES+BIN_FILES).each do |srcfile|
+  objfile = File.join(OBJDIR, File.basename(srcfile).ext('o'))
+  file objfile => [srcfile, OBJDIR] do
+    sh "#{CC} #{CCFLAGS.join(" ")} -c #{srcfile} -o #{objfile}"
   end
 end
 
-desc "link sources for unit testing"
-directory "bin"
-task :linktests => [:compiletests, "bin"] do
-  sh "#{LD} -o #{OUTFILE_TEST} #{OBJ_FILES.join(" ")} \
-#{TEST_OBJ.join(" ")} #{LDFLAGS.join(" ")} -lgtest -lboost_regex-mt"
-end
+# cleaning tasks
+CLEAN.include("**/*.o", ".depend.mf", "build")
+CLOBBER.include("**/*.o", APPLICATION, TEST, ".depend.mf", "build", "bin")
 
-# cleanup tasks
-CLEAN.include("build", "tests/*.o")
-CLOBBER.include("build", "bin", "tests/*.o")

@@ -6,6 +6,7 @@ require 'rake/loaders/makefile'
 # binaries
 APPLICATION = 'bin/plustache'
 TEST = 'bin/plustache_tests'
+STATIC_LIB = 'lib/libplustache.a'
 # directories
 BINDIR = "bin"
 OBJDIR = "build"
@@ -48,6 +49,9 @@ task :app => APPLICATION do
   sh "./#{APPLICATION}"
 end
 
+desc "task for compiling static plustache library"
+task :static => STATIC_LIB do
+end
 # generate dependencies
 file '.depend.mf' do
   sh "g++ -M -MF .depend.mf -I #{INCLUDE_DIRS.join(' -I')} \
@@ -72,6 +76,12 @@ file TEST => SRC_OBJECTS + TEST_OBJECTS do |t|
 -lboost_regex-mt -lgtest"
 end
 
+# rules for static library
+directory LIBDIR
+file STATIC_LIB => LIBDIR
+file STATIC_LIB => SRC_OBJECTS do |t|
+  sh "ar rcs #{STATIC_LIB} #{SRC_OBJECTS}"
+end
 # compile rules for object files
 directory OBJDIR
 (TEST_FILES+SRC_FILES+BIN_FILES).each do |srcfile|

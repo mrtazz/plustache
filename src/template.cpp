@@ -12,6 +12,8 @@
  */
 template_t::template_t()
 {
+    // set template path
+    template_path = "";
     // lookup table for html escape
     escape_lut["&"] = "&amp;";
     escape_lut["<"] = "&lt;";
@@ -102,6 +104,11 @@ string template_t::render_tags(string tmplate, map<string, string> ctx)
         {
             repl.assign("");
         }
+        // found a partial
+        else if (modifier == ">")
+        {
+            repl.assign(template_t::render(template_t::get_partial(key), ctx));
+        }
         // normal tag
         else
         {
@@ -111,6 +118,7 @@ string template_t::render_tags(string tmplate, map<string, string> ctx)
 
         // replace
         ret += regex_replace(text, tag, repl, match_default | format_all);
+        // set start for next tag and rest of string
         rest.assign(matches[0].second, end);
         start = matches[0].second;
     }
@@ -289,3 +297,37 @@ string template_t::html_escape(string s)
     return ret;
 }
 
+
+/**
+ * @brief method to load partial template from file
+ *
+ * @param s name of the partial to load
+ *
+ * @return partial template as string
+ */
+string template_t::get_partial(string partial)
+{
+    string ret = "";
+    partial += ".mustache";
+    // file path with template path prefix
+    ifstream extended_file(partial.c_str());
+    // true if it was a valid file path
+    if (extended_file.is_open())
+    {
+        ret.assign((istreambuf_iterator<char>(extended_file)),
+                    istreambuf_iterator<char>());
+        extended_file.close();
+    }
+    else
+    {
+        // file path without prefix
+        ifstream file(partial.c_str());
+        if(file.is_open())
+        {
+          ret.assign((istreambuf_iterator<char>(file)),
+                      istreambuf_iterator<char>());
+          file.close();
+        }
+    }
+    return ret;
+}

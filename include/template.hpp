@@ -25,6 +25,7 @@ public:
     string render(string tmplate, map<string, string> ctx);
 
 private:
+    string template_path;
     /* opening and closing tags */
     string otag;
     string ctag;
@@ -32,10 +33,13 @@ private:
     regex tag;
     regex section;
     regex escape_chars;
+    /* lut for HTML escape chars */
     map<string, string> escape_lut;
+    /* render and helper methods */
     string render_tags(string tmplate, context ctx);
     string render_tags(string tmplate, map<string, string> ctx);
     string render_sections(string tmplate, context ctx);
     string render_sections(string tmplate, map<string, string> ctx);
     string html_escape(string s);
+    string get_partial(string partial);
 };

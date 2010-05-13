@@ -1,6 +1,5 @@
 # plustache - mustache templates for C++
-Basic port of mustache templating
-[http://mustache.github.com](http://mustache.github.com) to C++.
+Basic port of [mustache templating](http://mustache.github.com) to C++.
 
 ## Why HTML templating in C++?
 Honestly, I don't know, but I wanted to find out if/how it is
@@ -36,12 +35,12 @@ Result:
     Hi I am Daniel.
     I like turtles.
 
-## TODO:
+## TODO
 * Collections in sections
-* Partials (if possible)
-* Values in an object instead of hash only
-* plustache cli command
+* Nested sections
+* Context object instead of map only
+* plustache executable
 
 ## Dependencies
-* google test for unit testing
 * boost for regex and some other things
+* google test for unit testing

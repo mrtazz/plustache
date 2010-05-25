@@ -37,9 +37,9 @@ Result:
 
 ## TODO
 * Collections in sections
-* Nested sections
 * Context object instead of map only
 * plustache executable
+* Set delimiter in template
 
 ## Dependencies
 * boost for regex and some other things

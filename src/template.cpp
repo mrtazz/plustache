@@ -184,7 +184,18 @@ string template_t::render_sections(string tmplate, map<string, string> ctx)
         if (modifier == "^" && show == "false") show = "true";
         else if (modifier == "^" && show == "true") show = "false";
         // assign replacement content
-        if (show == "true") repl.assign(matches[3]);
+        if (show == "true")
+        {
+            if (regex_search(matches[3].first, matches[3].second,
+                             section, match_default | format_all))
+            {
+                repl.assign(template_t::render_sections(matches[3], ctx));
+            }
+            else
+            {
+                repl.assign(matches[3]);
+            }
+        }
         else repl.assign("");
         ret += regex_replace(text, section, repl, match_default | format_all);
         rest.assign(matches[0].second, end);

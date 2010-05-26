@@ -1,14 +1,11 @@
 # plustache - mustache templates for C++
 Basic port of [mustache templating](http://mustache.github.com) to C++.
 
-## Why HTML templating in C++?
-Honestly, I don't know, but I wanted to find out if/how it is
-possible to port mustaches to a more static language.
-And learn a lot in the progress.
-
-That is also why the supported mustache functionality is still
-very basic. More functionality
-will be implemented, when I figure out what's the best way to do it.
+## Motivation
+I want to find out if/how it is possible to port mustaches to a more static
+language.  Also I found [ctemplate](http://code.google.com/p/google-ctemplate/)
+to be rather complicated (I have to admit I never used it, but merely read the
+documentation). Therefore I am trying to keep this one as simple as possible.
 
 ## Usage
 Create a template:
@@ -39,7 +36,6 @@ Result:
 * Collections in sections
 * Context object instead of map only
 * plustache executable
-* Set delimiter in template
 
 ## Dependencies
 * boost for regex and some other things

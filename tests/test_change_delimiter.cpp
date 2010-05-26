@@ -11,7 +11,6 @@ class ChangeDelimiterTest : public ::testing::Test
     string result_file;
     string template_string;
     string result_notfound;
-    string notfound;
     map<string, string> ctx;
     string file;
 
@@ -26,8 +25,8 @@ class ChangeDelimiterTest : public ::testing::Test
     virtual void SetUp()
     {
         template_string = "Hi I am {{name}}.\n";
-        template_string += "{{=<\% \%>=}}\n";
-        template_string += "I like <\%pet\%>.\n";
+        template_string += "{{=<\% \%>=}}";
+        template_string += "I like <\%pet\%>.";
 
         file = "multiple.mustache";
 
@@ -40,8 +39,8 @@ class ChangeDelimiterTest : public ::testing::Test
         ctx["pet"] = "turtles";
         template_t t;
         result_string = t.render(template_string, ctx);
-        result_file = t.render(file, ctx);
-        result_notfound = t.render(notfound, ctx);
+        template_t t2;
+        result_file = t2.render(file, ctx);
     }
 
     virtual void TearDown()
@@ -55,13 +54,13 @@ class ChangeDelimiterTest : public ::testing::Test
 TEST_F(ChangeDelimiterTest, TestChangeDelimiterFromString)
 {
     string expected = "Hi I am Daniel.\n";
-           expected += "I like turtles.\n";
+           expected += "I like turtles.";
     EXPECT_EQ(expected, result_string);
 }
 
 TEST_F(ChangeDelimiterTest, TestChangeDelimiterFromFile)
 {
     string expected = "Hi I am Daniel.\n";
-           expected += "I like turtles.\n";
+           expected += "I like turtles.";
     EXPECT_EQ(expected, result_file);
 }

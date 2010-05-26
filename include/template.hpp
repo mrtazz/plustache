@@ -42,4 +42,5 @@ private:
     string render_sections(string tmplate, map<string, string> ctx);
     string html_escape(string s);
     string get_partial(string partial);
+    void change_delimiter(string opentag, string closetag);
 };

@@ -118,6 +118,22 @@ string template_t::render_tags(string tmplate, map<string, string> ctx)
 
         // replace
         ret += regex_replace(text, tag, repl, match_default | format_all);
+        // change delimiter after was removed
+        if (modifier == "=")
+        {
+          // regex for finding delimiters
+          regex delim("(.+?) (.+?)=");
+          // match object
+          match_results<std::string::const_iterator> delim_m;
+          // search for the delimiters
+          regex_search(matches[2].first, matches[2].second, delim_m, delim,
+                       match_default | format_all);
+          // set new otag and ctag
+          string new_otag = delim_m[1];
+          string new_ctag = delim_m[2];
+          // change delimiters
+          template_t::change_delimiter(new_otag, new_ctag);
+        }
         // set start for next tag and rest of string
         rest.assign(matches[0].second, end);
         start = matches[0].second;
@@ -341,4 +357,20 @@ string template_t::get_partial(string partial)
         }
     }
     return ret;
+}
+
+/**
+ * @brief method to change delimiters
+ *
+ * @param opentag delimiter for open tag
+ * @param closetag delimiter for closed tag
+ */
+void template_t::change_delimiter(string opentag, string closetag)
+{
+    otag = opentag;
+    ctag = closetag;
+    // tag and section regex
+    template_t::tag.assign(otag + "(#|=|&|!|>|\\{)?(.+?)(\\})?" + ctag);
+    template_t::section.assign(otag + "(\\^|\\#)([^\\}]*)" + ctag + "\\s*(.+?)\\s*"
+                                + otag + "/\\2"+ctag);
 }

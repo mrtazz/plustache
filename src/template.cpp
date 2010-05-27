@@ -335,9 +335,11 @@ string template_t::html_escape(string s)
 string template_t::get_partial(string partial)
 {
     string ret = "";
+    string file_with_path = template_path;
     partial += ".mustache";
+    file_with_path += partial;
     // file path with template path prefix
-    ifstream extended_file(partial.c_str());
+    ifstream extended_file(file_with_path.c_str());
     // true if it was a valid file path
     if (extended_file.is_open())
     {

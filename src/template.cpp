@@ -7,13 +7,30 @@
 #include <template.hpp>
 
 /**
- * @brief constructor, basically only assign regex
- * and initialize html escape lut
+ * @brief constructor taking no arguments
  */
 template_t::template_t()
 {
     // set template path
     template_path = "";
+    template_t::compile_data();
+}
+
+/**
+ * @brief constructor taking the template path as argument
+ *
+ * @param tmpl_path path to the template directory
+ */
+template_t::template_t(string tmpl_path)
+{
+    template_path = tmpl_path;
+}
+
+/**
+ * @brief function to compile all the basic data like regex, tags, etc.
+ */
+void template_t::compile_data()
+{
     // lookup table for html escape
     escape_lut["&"] = "&amp;";
     escape_lut["<"] = "&lt;";
@@ -30,6 +47,9 @@ template_t::template_t()
                    + otag + "/\\2"+ctag);
 }
 
+/**
+ * @brief destructor nothing to do here
+ */
 template_t::~template_t()
 {
 
@@ -232,21 +252,8 @@ string template_t::render_sections(string tmplate, map<string, string> ctx)
  */
 string template_t::render(string tmplate, context ctx)
 {
-    // string to hold the template
-    string tmp = "";
-    ifstream file(tmplate.c_str());
-    // true if it was a valid file path
-    if (file.is_open())
-    {
-        tmp.assign((istreambuf_iterator<char>(file)),
-                    istreambuf_iterator<char>());
-        file.close();
-    }
-    // tmplate was maybe a complete template and no file path
-    else
-    {
-        tmp = tmplate;
-    }
+    // get template
+    string tmp = get_template(tmplate);
 
     string first = template_t::render_sections(tmp, ctx);
     string second = template_t::render_tags(first, ctx);
@@ -263,26 +270,18 @@ string template_t::render(string tmplate, context ctx)
  */
 string template_t::render(string tmplate, map<string, string> ctx)
 {
-    // string to hold the template
-    string tmp = "";
-    ifstream file(tmplate.c_str());
-    // true if it was a valid file path
-    if (file.is_open())
-    {
-        tmp.assign((istreambuf_iterator<char>(file)),
-                    istreambuf_iterator<char>());
-        file.close();
-    }
-    // tmplate was maybe a complete template and no file path
-    else
-    {
-        tmp = tmplate;
-    }
+    // get template
+    string tmp = get_template(tmplate);
 
     string first = template_t::render_sections(tmp, ctx);
     string second = template_t::render_tags(first, ctx);
     return second;
 }
+
+//
+// HELPER FUNCTIONS
+//
+
 
 /**
  * @brief method to escape html strings
@@ -375,4 +374,46 @@ void template_t::change_delimiter(string opentag, string closetag)
     template_t::tag.assign(otag + "(#|=|&|!|>|\\{)?(.+?)(\\})?" + ctag);
     template_t::section.assign(otag + "(\\^|\\#)([^\\}]*)" + ctag + "\\s*(.+?)\\s*"
                                 + otag + "/\\2"+ctag);
+}
+
+/**
+ * @brief function to prepare template for rendering
+ *
+ * @param tmpl path to template or template directory
+ *
+ * @return template as string
+ */
+string template_t::get_template(string tmpl)
+{
+    // string to hold the template
+    string tmp = "";
+    ifstream file(tmpl.c_str());
+    ifstream file_from_tmpl_dir((template_path + tmpl).c_str());
+    // true if it was a valid local file path
+    if (file.is_open())
+    {
+        tmp.assign((istreambuf_iterator<char>(file)),
+                    istreambuf_iterator<char>());
+        file.close();
+    }
+    // maybe the template is in the standard directory
+    else if (file_from_tmpl_dir.is_open())
+    {
+        tmp.assign((istreambuf_iterator<char>(file_from_tmpl_dir)),
+                    istreambuf_iterator<char>());
+        file_from_tmpl_dir.close();
+
+    }
+    // tmplate was maybe a complete template and no file path
+    else
+    {
+        tmp = tmpl;
+    }
+
+    // cleanup
+    if (file.is_open()) file.close();
+    if (file_from_tmpl_dir.is_open()) file_from_tmpl_dir.close();
+
+    // return template
+    return tmp;
 }

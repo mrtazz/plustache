@@ -20,6 +20,7 @@ using namespace boost;
 class template_t {
 public:
     template_t ();
+    template_t (string tmpl_path);
     ~template_t ();
     string render(string tmplate, context ctx);
     string render(string tmplate, map<string, string> ctx);
@@ -43,4 +44,6 @@ private:
     string html_escape(string s);
     string get_partial(string partial);
     void change_delimiter(string opentag, string closetag);
+    void compile_data();
+    string get_template(string tmpl);
 };

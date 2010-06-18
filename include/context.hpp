@@ -7,6 +7,11 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <vector>
+
+/* defines */
+typedef vector<map<string, string>> buckets;
+typedef map<string, string> bucket;
 
 using namespace std;
 
@@ -17,4 +22,7 @@ public:
 
 private:
     /* data */
+    map<string, buckets> ctx;
+    int add(string key, string value);
+    int add(string key, buckets bucks);
 };

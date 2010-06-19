@@ -15,3 +15,13 @@ context::~context()
 {
 
 }
+
+int context::add(string key, string value)
+{
+
+}
+
+int context::add(string key, buckets bucks)
+{
+
+}

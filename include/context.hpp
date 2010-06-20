@@ -21,6 +21,7 @@ public:
     ~context ();
     int add(string key, string value);
     int add(string key, buckets bucks);
+    buckets get(string key);
 
 private:
     /* data */

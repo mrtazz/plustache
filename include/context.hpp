@@ -19,10 +19,10 @@ class context {
 public:
     context ();
     ~context ();
+    int add(string key, string value);
+    int add(string key, buckets bucks);
 
 private:
     /* data */
     map<string, buckets> ctx;
-    int add(string key, string value);
-    int add(string key, buckets bucks);
 };

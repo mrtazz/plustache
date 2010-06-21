@@ -26,7 +26,10 @@ context::~context()
  */
 int context::add(string key, string value)
 {
-
+  bucket buck;
+  buck[key] = value;
+  ctx[key].push_back(buck);
+  return 0;
 }
 
 /**
@@ -39,7 +42,8 @@ int context::add(string key, string value)
  */
 int context::add(string key, buckets bucks)
 {
-
+  ctx[key] = (bucks);
+  return 0;
 }
 
 /**

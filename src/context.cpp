@@ -57,5 +57,5 @@ int context::add(string key, buckets bucks)
  */
 buckets context::get(string key)
 {
-
+  return ctx[key];
 }

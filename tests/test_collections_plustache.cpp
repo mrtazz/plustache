@@ -1,4 +1,5 @@
 #include "template.hpp"
+#include "context.hpp"
 #include <iostream>
 #include <fstream>
 #include <gtest/gtest.h>
@@ -10,7 +11,6 @@ class CollectionsTest : public ::testing::Test
     string result_string;
     string result_file;
     string template_string;
-    map<string, string> ctx;
     string file;
 
     CollectionsTest()
@@ -34,7 +34,17 @@ class CollectionsTest : public ::testing::Test
         myfile << template_string;
         myfile.close();
 
-        ctx["me"] = "Daniel";
+        context ctx;
+        ctx.add("me", "Daniel");
+        buckets b;
+        bucket b1;
+        b1["name"] = "Tom";
+        bucket b2;
+        b2["name"] = "Jerry";
+        b.push_back(b1);
+        b.push_back(b2);
+        ctx.add("people", b);
+
         template_t t;
         result_string = t.render(template_string, ctx);
         result_file = t.render(file, ctx);

@@ -1,5 +1,4 @@
 #include "template.hpp"
-#include "context.hpp"
 #include <iostream>
 #include <fstream>
 #include <gtest/gtest.h>

@@ -5,15 +5,10 @@
  */
 
 #include <iostream>
-#include <string>
-#include <map>
-#include <vector>
+#include "plustache_types.hpp"
 
 using namespace std;
 
-/* defines */
-typedef vector< map<string, string> > buckets;
-typedef map<string, string> bucket;
 
 class context {
 public:

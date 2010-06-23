@@ -7,11 +7,10 @@
 #include <iostream>
 #include <fstream>
 #include <streambuf>
-#include <string>
 #include <boost/algorithm/string/trim.hpp>
-#include <map>
 #include <boost/regex.hpp>
 
+#include <plustache_types.hpp>
 #include <context.hpp>
 
 using namespace std;

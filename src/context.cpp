@@ -62,11 +62,8 @@ int context::add(string key, buckets bucks)
 buckets context::get(string key)
 {
     buckets ret;
-    try
-    {
-        ret = ctx[key];
-    }
-    catch(int i)
+    ret = ctx[key];
+    if (ret.size() < 1)
     {
         bucket b;
         b[key] = "";

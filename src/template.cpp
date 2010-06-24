@@ -120,9 +120,7 @@ string template_t::render_tags(string tmplate, context ctx)
         {
             try
             {
-                buckets b = ctx.get(key);
-                string s = (b.size() > 0) ? b[0][key] : "";
-                repl.assign(template_t::html_escape(s));
+                repl.assign(template_t::html_escape(ctx.get(key)[0][key]));
             }
             catch(int i) { repl.assign(""); }
         }

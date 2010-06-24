@@ -192,7 +192,7 @@ string template_t::render_sections(string tmplate, context ctx)
         values = ctx.get(key);
         if (values.size() == 1)
         {
-            show = values[0][key];
+            show = values[0][key] != "" ? values[0][key] : "false";
         }
         else if(values.size() > 1)
         {

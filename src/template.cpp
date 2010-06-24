@@ -56,20 +56,6 @@ template_t::~template_t()
 }
 
 /**
- * @brief method to render tags with given context object
- *
- * @param tmplate template string
- * @param ctx context object
- *
- * @return rendered string
- */
-string template_t::render_tags(string tmplate, context ctx)
-{
-    string ret = "";
-    return ret;
-}
-
-/**
  * @brief method to render tags with a given map
  *
  * @param tmplate template string to render
@@ -77,7 +63,7 @@ string template_t::render_tags(string tmplate, context ctx)
  *
  * @return rendered string
  */
-string template_t::render_tags(string tmplate, map<string, string> ctx)
+string template_t::render_tags(string tmplate, context ctx)
 {
     // initialize data
     string ret = "";
@@ -106,7 +92,7 @@ string template_t::render_tags(string tmplate, map<string, string> ctx)
             try
             {
                 // get value
-                string s = ctx[key];
+                string s = ctx.get(key)[0][key];
                 // escape backslash in string
                 const string f = "\\";
                 size_t found = s.find(f);
@@ -132,7 +118,12 @@ string template_t::render_tags(string tmplate, map<string, string> ctx)
         // normal tag
         else
         {
-            try { repl.assign(template_t::html_escape(ctx[key])); }
+            try
+            {
+                buckets b = ctx.get(key);
+                string s = (b.size() > 0) ? b[0][key] : "";
+                repl.assign(template_t::html_escape(s));
+            }
             catch(int i) { repl.assign(""); }
         }
 
@@ -164,20 +155,6 @@ string template_t::render_tags(string tmplate, map<string, string> ctx)
 }
 
 /**
- * @brief method to render sections with a given context object
- *
- * @param tmplate template string to render
- * @param ctx context object
- *
- * @return rendered string
- */
-string template_t::render_sections(string tmplate, context ctx)
-{
-    string ret = "";
-    return ret;
-}
-
-/**
  * @brief method to render sections with a given map
  *
  * @param tmplate template string to render
@@ -185,7 +162,7 @@ string template_t::render_sections(string tmplate, context ctx)
  *
  * @return rendered string
  */
-string template_t::render_sections(string tmplate, map<string, string> ctx)
+string template_t::render_sections(string tmplate, context ctx)
 {
     // initialize data structures
     string ret = "";
@@ -213,9 +190,16 @@ string template_t::render_sections(string tmplate, map<string, string> ctx)
         algorithm::trim(modifier);
         string repl = "";
         string show = "false";
-        show = ctx[key];
-        // key miss in map means false
-        if (show == "") show = "false";
+        buckets values;
+        values = ctx.get(key);
+        if (values.size() == 1)
+        {
+            show = values[0][key];
+        }
+        else if(values.size() > 1)
+        {
+            show = "true";
+        }
         // inverted section?
         if (modifier == "^" && show == "false") show = "true";
         else if (modifier == "^" && show == "true") show = "false";
@@ -229,7 +213,11 @@ string template_t::render_sections(string tmplate, map<string, string> ctx)
             }
             else
             {
-                repl.assign(matches[3]);
+                for(buckets::iterator it = values.begin();
+                    it != values.end(); ++it)
+                {
+                    repl += template_t::render_tags(matches[3], ctx);
+                }
             }
         }
         else repl.assign("");
@@ -268,13 +256,18 @@ string template_t::render(string tmplate, context ctx)
  *
  * @return rendered string
  */
-string template_t::render(string tmplate, map<string, string> ctx)
+string template_t::render(string tmplate, bucket ctx)
 {
     // get template
     string tmp = get_template(tmplate);
+    context contxt;
+    for(bucket::const_iterator it = ctx.begin(); it != ctx.end(); it++)
+    {
+        contxt.add(it->first, it->second);
+    }
 
-    string first = template_t::render_sections(tmp, ctx);
-    string second = template_t::render_tags(first, ctx);
+    string first = template_t::render_sections(tmp, contxt);
+    string second = template_t::render_tags(first, contxt);
     return second;
 }
 

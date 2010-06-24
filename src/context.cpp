@@ -26,10 +26,10 @@ context::~context()
  */
 int context::add(string key, string value)
 {
-  bucket buck;
-  buck[key] = value;
-  ctx[key].push_back(buck);
-  return 0;
+    bucket buck;
+    buck[key] = value;
+    ctx[key].push_back(buck);
+    return 0;
 }
 
 /**
@@ -42,8 +42,8 @@ int context::add(string key, string value)
  */
 int context::add(string key, buckets bucks)
 {
-  ctx[key] = (bucks);
-  return 0;
+    ctx[key] = bucks;
+    return 0;
 }
 
 /**
@@ -61,5 +61,16 @@ int context::add(string key, buckets bucks)
  */
 buckets context::get(string key)
 {
-  return ctx[key];
+    buckets ret;
+    try
+    {
+        ret = ctx[key];
+    }
+    catch(int i)
+    {
+        bucket b;
+        b[key] = "";
+        ret.push_back(b);
+    }
+    return ret;
 }

@@ -60,15 +60,15 @@ class CollectionsTest : public ::testing::Test
 TEST_F(CollectionsTest, TestCollectionMustacheFromString)
 {
     string expected = "Hi I am Daniel.\n";
-          expected += "Hi Tom!\n";
-          expected += "Hi Jerry!\n";
+          expected += "Hi Tom!";
+          expected += "Hi Jerry!";
     EXPECT_EQ(expected, result_string);
 }
 
 TEST_F(CollectionsTest, TestCollectionMustacheFromFile)
 {
     string expected = "Hi I am Daniel.\n";
-          expected += "Hi Tom!\n";
-          expected += "Hi Jerry!\n";
+          expected += "Hi Tom!";
+          expected += "Hi Jerry!";
     EXPECT_EQ(expected, result_file);
 }

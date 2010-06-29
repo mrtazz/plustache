@@ -211,11 +211,24 @@ string template_t::render_sections(string tmplate, context ctx)
             }
             else
             {
+              if (values.size() > 1)
+              {
                 for(buckets::iterator it = values.begin();
                     it != values.end(); ++it)
                 {
-                    repl += template_t::render_tags(matches[3], ctx);
+                  context small_ctx;
+                  for(bucket::const_iterator it_map = (*it).begin();
+                      it_map != (*it).end(); it_map++)
+                  {
+                    small_ctx.add(it_map->first, it_map->second);
+                    repl += template_t::render_tags(matches[3], small_ctx);
+                  }
                 }
+              }
+              else
+              {
+                repl.assign(matches[3]);
+              }
             }
         }
         else repl.assign("");

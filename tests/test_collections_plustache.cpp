@@ -72,3 +72,20 @@ TEST_F(CollectionsTest, TestCollectionMustacheFromFile)
           expected += "Hi Jerry!";
     EXPECT_EQ(expected, result_file);
 }
+
+TEST_F(CollectionsTest, TestCollectionMustacheWithSingleEntry)
+{
+    context ctx2;
+    ctx2.add("me", "Daniel");
+    template_t t;
+    buckets bucks;
+    bucket buck;
+    buck["name"] = "Tom";
+    bucks.push_back(buck);
+    ctx2.add("people", bucks);
+    string res;
+    res = t.render(template_string, ctx2);
+    string expected = "Hi I am Daniel.\n";
+          expected += "Hi Tom!";
+    EXPECT_EQ(expected, res);
+}

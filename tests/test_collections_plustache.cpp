@@ -7,10 +7,11 @@
 class CollectionsTest : public ::testing::Test
 {
  protected:
-    string result_string;
-    string result_file;
+    string result_single;
+    string result_multiple;
+    string result_multiple_fields;
     string template_string;
-    string file;
+    string template_single_string;
 
     CollectionsTest()
     {
@@ -24,68 +25,76 @@ class CollectionsTest : public ::testing::Test
     {
         template_string = "Hi I am {{me}}.\n";
         template_string += "{{# people}}";
-        template_string += "Hi {{name}}!";
+        template_string += "Hi {{me}}, I am {{name}}, I do {{work}}.";
         template_string += "{{/ people}}";
-        file = "collections.mustache";
+        template_single_string = "Hi I am {{me}}.\n";
+        template_single_string += "{{# people}}";
+        template_single_string += "Hi {{name}}!";
+        template_single_string += "{{/ people}}";
 
-        ofstream myfile;
-        myfile.open (file.c_str());
-        myfile << template_string;
-        myfile.close();
+        // single entry
+        bucket tom;
+        bucket jerry;
+        tom["name"] = "Tom";
+        buckets b_single;
+        b_single.push_back(tom);
+        context ctx_single;
+        ctx_single.add("me", "Daniel");
+        ctx_single.add("people",b_single);
 
+        // multiple entries
+        jerry["name"] = "Jerry";
+        buckets b_multiple;
+        b_multiple.push_back(tom);
+        b_multiple.push_back(jerry);
+        context ctx_multiple;
+        ctx_multiple.add("me", "Daniel");
+        ctx_multiple.add("people", b_multiple);
+
+        // multiple fields
+        tom["work"] = "Accounting";
+        jerry["work"] = "Magic";
+        buckets b_multiple_fields;
+        b_multiple_fields.push_back(tom);
+        b_multiple_fields.push_back(jerry);
         context ctx;
         ctx.add("me", "Daniel");
-        buckets b;
-        bucket b1;
-        b1["name"] = "Tom";
-        bucket b2;
-        b2["name"] = "Jerry";
-        b.push_back(b1);
-        b.push_back(b2);
-        ctx.add("people", b);
+        ctx.add("people", b_multiple_fields);
+
+
 
         template_t t;
-        result_string = t.render(template_string, ctx);
-        result_file = t.render(file, ctx);
+        result_single = t.render(template_single_string, ctx_single);
+        result_multiple = t.render(template_single_string, ctx_multiple);
+        result_multiple_fields = t.render(template_string, ctx);
     }
 
     virtual void TearDown()
     {
-        remove(file.c_str());
     }
 
 };
 
 // Tests that a simple mustache tag is replaced
-TEST_F(CollectionsTest, TestCollectionMustacheFromString)
+TEST_F(CollectionsTest, TestCollectionsSingle)
+{
+    string expected = "Hi I am Daniel.\n";
+          expected += "Hi Tom!";
+    EXPECT_EQ(expected, result_single);
+}
+
+TEST_F(CollectionsTest, TestCollectionsMultiple)
 {
     string expected = "Hi I am Daniel.\n";
           expected += "Hi Tom!";
           expected += "Hi Jerry!";
-    EXPECT_EQ(expected, result_string);
+    EXPECT_EQ(expected, result_multiple);
 }
 
-TEST_F(CollectionsTest, TestCollectionMustacheFromFile)
+TEST_F(CollectionsTest, TestCollectionMultipleWithMultipleFields)
 {
     string expected = "Hi I am Daniel.\n";
-          expected += "Hi Tom!";
-          expected += "Hi Jerry!";
-    EXPECT_EQ(expected, result_file);
-}
-
-TEST_F(CollectionsTest, TestCollectionMustacheWithSingleEntry)
-{
-    context ctx2;
-    ctx2.add("me", "Daniel");
-    template_t t;
-    buckets bucks;
-    bucket buck;
-    buck["name"] = "Tom";
-    bucks.push_back(buck);
-    ctx2.add("people", bucks);
-    string res;
-    res = t.render(template_string, ctx2);
-    string expected = "Hi I am Daniel.\n";
-          expected += "Hi Tom!";
-    EXPECT_EQ(expected, res);
+        expected += "Hi Daniel, I am Tom, I do Accounting.";
+        expected += "Hi Daniel, I am Jerry, I do Magic.";
+    EXPECT_EQ(expected, result_multiple_fields);
 }

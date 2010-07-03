@@ -46,6 +46,14 @@ int context::add(string key, CollectionType c)
     return 0;
 }
 
+/**
+/**
+ * @brief method to add fields of an ObjectType directly to the context
+ *
+ * @param o ObjectType with fields
+ *
+ * @return 0
+ */
 int context::add(ObjectType o)
 {
     for(ObjectType::const_iterator it = o.begin();

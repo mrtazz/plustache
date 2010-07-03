@@ -5,24 +5,22 @@
  */
 
 #include <iostream>
-#include <string>
-#include <map>
-#include <vector>
+#include "plustache_types.hpp"
 
 using namespace std;
 
-/* defines */
-typedef vector< map<string, string> > buckets;
-typedef map<string, string> bucket;
 
 class context {
 public:
     context ();
     ~context ();
+    int add(string key, string value);
+    int add(string key, CollectionType c);
+    int add(string key, ObjectType o);
+    int add(ObjectType o);
+    CollectionType get(string key);
 
 private:
     /* data */
-    map<string, buckets> ctx;
-    int add(string key, string value);
-    int add(string key, buckets bucks);
+    map<string, CollectionType> ctx;
 };

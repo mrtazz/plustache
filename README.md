@@ -2,12 +2,12 @@
 Basic port of [mustache templating](http://mustache.github.com) to C++.
 
 ## Motivation
-I want to find out if/how it is possible to port mustaches to a more static
-language.  Also I found [ctemplate](http://code.google.com/p/google-ctemplate/)
-to be rather complicated (I have to admit I never used it, but merely read the
-documentation). Therefore I am trying to keep this one as simple as possible.
+I just wanted to port mustache and build simple templating for C++.
+And I am still trying hard to keep it simple.
 
 ## Usage
+
+### Simple Usage
 Create a template:
 
     <h1>{{title}}</h1>
@@ -16,7 +16,7 @@ Create a template:
 
 Fill the context:
 
-    map<string, string> ctx;
+    ObjectType ctx;
     ctx["title"] = "About";
     ctx["name"] = "Daniel";
     ctx["thing"] = "turtles";
@@ -32,9 +32,50 @@ Result:
     Hi I am Daniel.
     I like turtles.
 
+### Advanced Usage
+Create the template:
+
+    <h1> {{title}} </h1>
+    <ul>
+      {{# friends}}
+        <li> {{name}}</li>
+        <li> {{job}}</li>
+        <li> {{status}}</li>
+      {{/ friends}}
+    </ul>
+
+Create the context:
+
+    // create types
+    context ctx;
+    CollectionType c;
+    ObjectType jim;
+    ObjectType john;
+    ObjectType jack;
+    // Fill values
+    ctx.add("title", "My friends");
+    jim["name"] = "Jim";
+    jim["job"] = "Wizard";
+    jim["status"] = "Eating";
+    john["name"] = "John";
+    john["job"] = "Rainbow Painter";
+    john["status"] = "Sleeping";
+    jack["name"] = "Jack";
+    jack["job"] = "Unicorn Trainer";
+    jack["status"] = "Riding";
+    // enter data
+    c.push_back(jim);
+    c.push_back(john);
+    ctx.add("friends", c);
+    // also possible
+    ctx.add("friends", jack);
+
+Render the template:
+
+    template_t t;
+    string result = t.render(template, ctx);
+
 ## TODO
-* Collections in sections
-* Context object instead of map only
 * plustache executable
 
 ## Dependencies

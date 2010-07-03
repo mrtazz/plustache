@@ -7,11 +7,10 @@
 #include <iostream>
 #include <fstream>
 #include <streambuf>
-#include <string>
 #include <boost/algorithm/string/trim.hpp>
-#include <map>
 #include <boost/regex.hpp>
 
+#include <plustache_types.hpp>
 #include <context.hpp>
 
 using namespace std;
@@ -23,7 +22,7 @@ public:
     template_t (string tmpl_path);
     ~template_t ();
     string render(string tmplate, context ctx);
-    string render(string tmplate, map<string, string> ctx);
+    string render(string tmplate, ObjectType ctx);
 
 private:
     string template_path;
@@ -38,9 +37,7 @@ private:
     map<string, string> escape_lut;
     /* render and helper methods */
     string render_tags(string tmplate, context ctx);
-    string render_tags(string tmplate, map<string, string> ctx);
     string render_sections(string tmplate, context ctx);
-    string render_sections(string tmplate, map<string, string> ctx);
     string html_escape(string s);
     string get_partial(string partial);
     void change_delimiter(string opentag, string closetag);

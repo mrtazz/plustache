@@ -56,20 +56,6 @@ template_t::~template_t()
 }
 
 /**
- * @brief method to render tags with given context object
- *
- * @param tmplate template string
- * @param ctx context object
- *
- * @return rendered string
- */
-string template_t::render_tags(string tmplate, context ctx)
-{
-    string ret = "";
-    return ret;
-}
-
-/**
  * @brief method to render tags with a given map
  *
  * @param tmplate template string to render
@@ -77,7 +63,7 @@ string template_t::render_tags(string tmplate, context ctx)
  *
  * @return rendered string
  */
-string template_t::render_tags(string tmplate, map<string, string> ctx)
+string template_t::render_tags(string tmplate, context ctx)
 {
     // initialize data
     string ret = "";
@@ -106,7 +92,7 @@ string template_t::render_tags(string tmplate, map<string, string> ctx)
             try
             {
                 // get value
-                string s = ctx[key];
+                string s = ctx.get(key)[0][key];
                 // escape backslash in string
                 const string f = "\\";
                 size_t found = s.find(f);
@@ -132,7 +118,10 @@ string template_t::render_tags(string tmplate, map<string, string> ctx)
         // normal tag
         else
         {
-            try { repl.assign(template_t::html_escape(ctx[key])); }
+            try
+            {
+                repl.assign(template_t::html_escape(ctx.get(key)[0][key]));
+            }
             catch(int i) { repl.assign(""); }
         }
 
@@ -164,20 +153,6 @@ string template_t::render_tags(string tmplate, map<string, string> ctx)
 }
 
 /**
- * @brief method to render sections with a given context object
- *
- * @param tmplate template string to render
- * @param ctx context object
- *
- * @return rendered string
- */
-string template_t::render_sections(string tmplate, context ctx)
-{
-    string ret = "";
-    return ret;
-}
-
-/**
  * @brief method to render sections with a given map
  *
  * @param tmplate template string to render
@@ -185,7 +160,7 @@ string template_t::render_sections(string tmplate, context ctx)
  *
  * @return rendered string
  */
-string template_t::render_sections(string tmplate, map<string, string> ctx)
+string template_t::render_sections(string tmplate, context ctx)
 {
     // initialize data structures
     string ret = "";
@@ -213,9 +188,27 @@ string template_t::render_sections(string tmplate, map<string, string> ctx)
         algorithm::trim(modifier);
         string repl = "";
         string show = "false";
-        show = ctx[key];
-        // key miss in map means false
-        if (show == "") show = "false";
+        CollectionType values;
+        values = ctx.get(key);
+        if (values.size() == 1)
+        {
+            // if we don't have a collection, we find the key and an
+            // empty map bucket means false
+            if (values[0].find(key) != values[0].end())
+            {
+              show = values[0][key] != "" ? values[0][key] : "false";
+            }
+            // if we have a collection, we want to show it if there is
+            // something to show
+            else
+            {
+              show = values[0].size() > 0 ? "true" : "false";
+            }
+        }
+        else if(values.size() > 1)
+        {
+            show = "true";
+        }
         // inverted section?
         if (modifier == "^" && show == "false") show = "true";
         else if (modifier == "^" && show == "true") show = "false";
@@ -229,7 +222,14 @@ string template_t::render_sections(string tmplate, map<string, string> ctx)
             }
             else
             {
-                repl.assign(matches[3]);
+                for(CollectionType::iterator it = values.begin();
+                    it != values.end(); ++it)
+                {
+                  context small_ctx;
+                  small_ctx = ctx;
+                  small_ctx.add(*it);
+                  repl += template_t::render_tags(matches[3], small_ctx);
+                }
             }
         }
         else repl.assign("");
@@ -268,13 +268,15 @@ string template_t::render(string tmplate, context ctx)
  *
  * @return rendered string
  */
-string template_t::render(string tmplate, map<string, string> ctx)
+string template_t::render(string tmplate, ObjectType ctx)
 {
     // get template
     string tmp = get_template(tmplate);
+    context contxt;
+    contxt.add(ctx);
 
-    string first = template_t::render_sections(tmp, ctx);
-    string second = template_t::render_tags(first, ctx);
+    string first = template_t::render_sections(tmp, contxt);
+    string second = template_t::render_tags(first, contxt);
     return second;
 }
 
@@ -372,8 +374,8 @@ void template_t::change_delimiter(string opentag, string closetag)
     ctag = closetag;
     // tag and section regex
     template_t::tag.assign(otag + "(#|=|&|!|>|\\{)?(.+?)(\\})?" + ctag);
-    template_t::section.assign(otag + "(\\^|\\#)([^\\}]*)" + ctag + "\\s*(.+?)\\s*"
-                                + otag + "/\\2"+ctag);
+    template_t::section.assign(otag + "(\\^|\\#)([^\\}]*)" + ctag +
+                               "\\s*(.+?)\\s*" + otag + "/\\2"+ctag);
 }
 
 /**

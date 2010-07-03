@@ -7,11 +7,11 @@
 class CollectionsTest : public ::testing::Test
 {
  protected:
-    string result_string;
-    string result_file;
+    string result_single;
+    string result_multiple;
+    string result_multiple_fields;
     string template_string;
-    map<string, string> ctx;
-    string file;
+    string template_single_string;
 
     CollectionsTest()
     {
@@ -25,41 +25,74 @@ class CollectionsTest : public ::testing::Test
     {
         template_string = "Hi I am {{me}}.\n";
         template_string += "{{# people}}";
-        template_string += "Hi {{name}}!";
+        template_string += "Hi {{me}}, I am {{name}}, I do {{work}}.";
         template_string += "{{/ people}}";
-        file = "collections.mustache";
+        template_single_string = "Hi I am {{me}}.\n";
+        template_single_string += "{{# people}}";
+        template_single_string += "Hi {{name}}!";
+        template_single_string += "{{/ people}}";
 
-        ofstream myfile;
-        myfile.open (file.c_str());
-        myfile << template_string;
-        myfile.close();
+        // single entry
+        ObjectType tom;
+        ObjectType jerry;
+        tom["name"] = "Tom";
+        context ctx_single;
+        ctx_single.add("me", "Daniel");
+        ctx_single.add("people",tom);
 
-        ctx["me"] = "Daniel";
+        // multiple entries
+        jerry["name"] = "Jerry";
+        CollectionType b_multiple;
+        b_multiple.push_back(tom);
+        b_multiple.push_back(jerry);
+        context ctx_multiple;
+        ctx_multiple.add("me", "Daniel");
+        ctx_multiple.add("people", b_multiple);
+
+        // multiple fields
+        tom["work"] = "Accounting";
+        jerry["work"] = "Magic";
+        CollectionType b_multiple_fields;
+        b_multiple_fields.push_back(tom);
+        context ctx;
+        ctx.add("me", "Daniel");
+        ctx.add("people", b_multiple_fields);
+        ctx.add("people", jerry);
+
+
+
         template_t t;
-        result_string = t.render(template_string, ctx);
-        result_file = t.render(file, ctx);
+        result_single = t.render(template_single_string, ctx_single);
+        result_multiple = t.render(template_single_string, ctx_multiple);
+        result_multiple_fields = t.render(template_string, ctx);
     }
 
     virtual void TearDown()
     {
-        remove(file.c_str());
     }
 
 };
 
 // Tests that a simple mustache tag is replaced
-TEST_F(CollectionsTest, TestCollectionMustacheFromString)
+TEST_F(CollectionsTest, TestCollectionsSingle)
 {
     string expected = "Hi I am Daniel.\n";
-          expected += "Hi Tom!\n";
-          expected += "Hi Jerry!\n";
-    EXPECT_EQ(expected, result_string);
+          expected += "Hi Tom!";
+    EXPECT_EQ(expected, result_single);
 }
 
-TEST_F(CollectionsTest, TestCollectionMustacheFromFile)
+TEST_F(CollectionsTest, TestCollectionsMultiple)
 {
     string expected = "Hi I am Daniel.\n";
-          expected += "Hi Tom!\n";
-          expected += "Hi Jerry!\n";
-    EXPECT_EQ(expected, result_file);
+          expected += "Hi Tom!";
+          expected += "Hi Jerry!";
+    EXPECT_EQ(expected, result_multiple);
+}
+
+TEST_F(CollectionsTest, TestCollectionMultipleWithMultipleFields)
+{
+    string expected = "Hi I am Daniel.\n";
+        expected += "Hi Daniel, I am Tom, I do Accounting.";
+        expected += "Hi Daniel, I am Jerry, I do Magic.";
+    EXPECT_EQ(expected, result_multiple_fields);
 }

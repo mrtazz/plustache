@@ -192,7 +192,18 @@ string template_t::render_sections(string tmplate, context ctx)
         values = ctx.get(key);
         if (values.size() == 1)
         {
-            show = values[0][key] != "" ? values[0][key] : "false";
+            // if we don't have a collection, we find the key and an
+            // empty map bucket means false
+            if (values[0].find(key) != values[0].end())
+            {
+              show = values[0][key] != "" ? values[0][key] : "false";
+            }
+            // if we have a collection, we want to show it if there is
+            // something to show
+            else
+            {
+              show = values[0].size() > 0 ? "true" : "false";
+            }
         }
         else if(values.size() > 1)
         {
@@ -211,8 +222,6 @@ string template_t::render_sections(string tmplate, context ctx)
             }
             else
             {
-              if (values.size() > 1)
-              {
                 for(buckets::iterator it = values.begin();
                     it != values.end(); ++it)
                 {
@@ -225,11 +234,6 @@ string template_t::render_sections(string tmplate, context ctx)
                   }
                   repl += template_t::render_tags(matches[3], small_ctx);
                 }
-              }
-              else
-              {
-                repl.assign(matches[3]);
-              }
             }
         }
         else repl.assign("");

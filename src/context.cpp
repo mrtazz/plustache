@@ -46,6 +46,15 @@ int context::add(string key, buckets bucks)
     return 0;
 }
 
+int context::add(bucket b)
+{
+  for(bucket::const_iterator it = b.begin();
+      it != b.end(); it++)
+  {
+    (*this).add(it->first, it->second);
+  }
+}
+
 /**
  * @brief method to get a value from the context
  *

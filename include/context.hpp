@@ -16,6 +16,7 @@ public:
     ~context ();
     int add(string key, string value);
     int add(string key, buckets bucks);
+    int add(bucket b);
     buckets get(string key);
 
 private:

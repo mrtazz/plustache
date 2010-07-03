@@ -227,11 +227,7 @@ string template_t::render_sections(string tmplate, context ctx)
                 {
                   context small_ctx;
                   small_ctx = ctx;
-                  for(bucket::const_iterator it_map = (*it).begin();
-                      it_map != (*it).end(); it_map++)
-                  {
-                    small_ctx.add(it_map->first, it_map->second);
-                  }
+                  small_ctx.add(*it);
                   repl += template_t::render_tags(matches[3], small_ctx);
                 }
             }
@@ -277,10 +273,7 @@ string template_t::render(string tmplate, bucket ctx)
     // get template
     string tmp = get_template(tmplate);
     context contxt;
-    for(bucket::const_iterator it = ctx.begin(); it != ctx.end(); it++)
-    {
-        contxt.add(it->first, it->second);
-    }
+    contxt.add(ctx);
 
     string first = template_t::render_sections(tmp, contxt);
     string second = template_t::render_tags(first, contxt);

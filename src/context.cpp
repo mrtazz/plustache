@@ -42,7 +42,18 @@ int context::add(string key, string value)
  */
 int context::add(string key, CollectionType c)
 {
-    ctx[key] = c;
+    if (ctx.find(key) == ctx.end())
+    {
+        ctx[key] = c;
+    }
+    else
+    {
+        for(CollectionType::iterator it = c.begin();
+            it != c.end(); ++it)
+        {
+            (*this).add(key, (*it));
+        }
+    }
     return 0;
 }
 

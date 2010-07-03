@@ -26,57 +26,58 @@ context::~context()
  */
 int context::add(string key, string value)
 {
-    bucket buck;
-    buck[key] = value;
-    ctx[key].push_back(buck);
+    ObjectType obj;
+    obj[key] = value;
+    ctx[key].push_back(obj);
     return 0;
 }
 
 /**
- * @brief method to add a bucket to a specific key in the context
+ * @brief method to add a collection to a specific key in the context
  *
  * @param key to store the data
- * @param bucks buckets
+ * @param c Collection to add
  *
  * @return 0 on success
  */
-int context::add(string key, buckets bucks)
+int context::add(string key, CollectionType c)
 {
-    ctx[key] = bucks;
+    ctx[key] = c;
     return 0;
 }
 
-int context::add(bucket b)
+int context::add(ObjectType o)
 {
-  for(bucket::const_iterator it = b.begin();
-      it != b.end(); it++)
+  for(ObjectType::const_iterator it = o.begin();
+      it != o.end(); it++)
   {
     (*this).add(it->first, it->second);
   }
+  return 0;
 }
 
 /**
  * @brief method to get a value from the context
  *
- * This is a generic getter which always returns buckets
+ * This is a generic getter which always returns a collection
  * (vector of maps) for a keyword. If the return value is a collection, the
- * collection is returned as buckets. If it is only a single value, a vector
+ * collection is returned. If it is only a single value, a vector
  * with length 1 is returned. If the keyword wasn't found, a vector with
- * length 0 is returned.
+ * length 1 and an empty bucket for the keyword is returned.
  *
  * @param key
  *
- * @return buckets for the keyword
+ * @return collection for the keyword
  */
-buckets context::get(string key)
+CollectionType context::get(string key)
 {
-    buckets ret;
+    CollectionType ret;
     ret = ctx[key];
     if (ret.size() < 1)
     {
-        bucket b;
-        b[key] = "";
-        ret.push_back(b);
+        ObjectType o;
+        o[key] = "";
+        ret.push_back(o);
     }
     return ret;
 }

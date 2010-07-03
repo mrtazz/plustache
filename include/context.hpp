@@ -15,11 +15,11 @@ public:
     context ();
     ~context ();
     int add(string key, string value);
-    int add(string key, buckets bucks);
-    int add(bucket b);
-    buckets get(string key);
+    int add(string key, CollectionType c);
+    int add(ObjectType o);
+    CollectionType get(string key);
 
 private:
     /* data */
-    map<string, buckets> ctx;
+    map<string, CollectionType> ctx;
 };

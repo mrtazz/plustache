@@ -22,7 +22,7 @@ public:
     template_t (string tmpl_path);
     ~template_t ();
     string render(string tmplate, context ctx);
-    string render(string tmplate, bucket ctx);
+    string render(string tmplate, ObjectType ctx);
 
 private:
     string template_path;

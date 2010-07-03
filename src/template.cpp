@@ -188,7 +188,7 @@ string template_t::render_sections(string tmplate, context ctx)
         algorithm::trim(modifier);
         string repl = "";
         string show = "false";
-        buckets values;
+        CollectionType values;
         values = ctx.get(key);
         if (values.size() == 1)
         {
@@ -222,7 +222,7 @@ string template_t::render_sections(string tmplate, context ctx)
             }
             else
             {
-                for(buckets::iterator it = values.begin();
+                for(CollectionType::iterator it = values.begin();
                     it != values.end(); ++it)
                 {
                   context small_ctx;
@@ -268,7 +268,7 @@ string template_t::render(string tmplate, context ctx)
  *
  * @return rendered string
  */
-string template_t::render(string tmplate, bucket ctx)
+string template_t::render(string tmplate, ObjectType ctx)
 {
     // get template
     string tmp = get_template(tmplate);

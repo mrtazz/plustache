@@ -10,5 +10,5 @@
 using namespace std;
 
 /* defines */
-typedef vector< map<string, string> > buckets;
-typedef map<string, string> bucket;
+typedef vector< map<string, string> > CollectionType;
+typedef map<string, string> ObjectType;

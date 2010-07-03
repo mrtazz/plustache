@@ -33,10 +33,10 @@ class CollectionsTest : public ::testing::Test
         template_single_string += "{{/ people}}";
 
         // single entry
-        bucket tom;
-        bucket jerry;
+        ObjectType tom;
+        ObjectType jerry;
         tom["name"] = "Tom";
-        buckets b_single;
+        CollectionType b_single;
         b_single.push_back(tom);
         context ctx_single;
         ctx_single.add("me", "Daniel");
@@ -44,7 +44,7 @@ class CollectionsTest : public ::testing::Test
 
         // multiple entries
         jerry["name"] = "Jerry";
-        buckets b_multiple;
+        CollectionType b_multiple;
         b_multiple.push_back(tom);
         b_multiple.push_back(jerry);
         context ctx_multiple;
@@ -54,7 +54,7 @@ class CollectionsTest : public ::testing::Test
         // multiple fields
         tom["work"] = "Accounting";
         jerry["work"] = "Magic";
-        buckets b_multiple_fields;
+        CollectionType b_multiple_fields;
         b_multiple_fields.push_back(tom);
         b_multiple_fields.push_back(jerry);
         context ctx;

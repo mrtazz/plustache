@@ -36,11 +36,9 @@ class CollectionsTest : public ::testing::Test
         ObjectType tom;
         ObjectType jerry;
         tom["name"] = "Tom";
-        CollectionType b_single;
-        b_single.push_back(tom);
         context ctx_single;
         ctx_single.add("me", "Daniel");
-        ctx_single.add("people",b_single);
+        ctx_single.add("people",tom);
 
         // multiple entries
         jerry["name"] = "Jerry";
@@ -56,10 +54,10 @@ class CollectionsTest : public ::testing::Test
         jerry["work"] = "Magic";
         CollectionType b_multiple_fields;
         b_multiple_fields.push_back(tom);
-        b_multiple_fields.push_back(jerry);
         context ctx;
         ctx.add("me", "Daniel");
         ctx.add("people", b_multiple_fields);
+        ctx.add("people", jerry);
 
 
 

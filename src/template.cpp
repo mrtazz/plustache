@@ -221,8 +221,8 @@ string template_t::render_sections(string tmplate, context ctx)
                       it_map != (*it).end(); it_map++)
                   {
                     small_ctx.add(it_map->first, it_map->second);
-                    repl += template_t::render_tags(matches[3], small_ctx);
                   }
+                  repl += template_t::render_tags(matches[3], small_ctx);
                 }
               }
               else

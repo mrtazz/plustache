@@ -47,6 +47,29 @@ int context::add(string key, CollectionType c)
 }
 
 /**
+ * @brief method to add an additional object to a collection in the context
+ *
+ * @param key for the collection
+ * @param o object to add
+ *
+ * @return 0
+ */
+int context::add(string key, ObjectType o)
+{
+    if (ctx.find(key) == ctx.end())
+    {
+        CollectionType c;
+        c.push_back(o);
+        ctx[key] = c;
+    }
+    else
+    {
+        ctx[key].push_back(o);
+    }
+
+    return 0;
+}
+
 /**
  * @brief method to add fields of an ObjectType directly to the context
  *

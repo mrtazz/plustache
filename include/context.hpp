@@ -16,6 +16,7 @@ public:
     ~context ();
     int add(string key, string value);
     int add(string key, CollectionType c);
+    int add(string key, ObjectType o);
     int add(ObjectType o);
     CollectionType get(string key);
 

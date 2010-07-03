@@ -217,6 +217,7 @@ string template_t::render_sections(string tmplate, context ctx)
                     it != values.end(); ++it)
                 {
                   context small_ctx;
+                  small_ctx = ctx;
                   for(bucket::const_iterator it_map = (*it).begin();
                       it_map != (*it).end(); it_map++)
                   {

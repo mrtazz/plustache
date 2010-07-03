@@ -377,8 +377,8 @@ void template_t::change_delimiter(string opentag, string closetag)
     ctag = closetag;
     // tag and section regex
     template_t::tag.assign(otag + "(#|=|&|!|>|\\{)?(.+?)(\\})?" + ctag);
-    template_t::section.assign(otag + "(\\^|\\#)([^\\}]*)" + ctag + "\\s*(.+?)\\s*"
-                                + otag + "/\\2"+ctag);
+    template_t::section.assign(otag + "(\\^|\\#)([^\\}]*)" + ctag +
+                               "\\s*(.+?)\\s*" + otag + "/\\2"+ctag);
 }
 
 /**

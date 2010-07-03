@@ -48,12 +48,12 @@ int context::add(string key, CollectionType c)
 
 int context::add(ObjectType o)
 {
-  for(ObjectType::const_iterator it = o.begin();
-      it != o.end(); it++)
-  {
-    (*this).add(it->first, it->second);
-  }
-  return 0;
+    for(ObjectType::const_iterator it = o.begin();
+        it != o.end(); it++)
+    {
+        (*this).add(it->first, it->second);
+    }
+    return 0;
 }
 
 /**

@@ -3,7 +3,8 @@
  * @brief header file for plustache template
  * @author Daniel Schauenberg <d@unwiredcouch.com>
  */
-
+#ifndef PLUSTACHE_TEMPLATE_H
+#define PLUSTACHE_TEMPLATE_H
 #include <iostream>
 #include <fstream>
 #include <streambuf>
@@ -44,3 +45,4 @@ private:
     void compile_data();
     string get_template(string tmpl);
 };
+#endif

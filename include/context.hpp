@@ -3,7 +3,8 @@
  * @brief header file for plustache template
  * @author Daniel Schauenberg <d@unwiredcouch.com>
  */
-
+#ifndef PLUSTACHE_CONTEXT_H
+#define PLUSTACHE_CONTEXT_H
 #include <iostream>
 #include "plustache_types.hpp"
 
@@ -24,3 +25,4 @@ private:
     /* data */
     map<string, CollectionType> ctx;
 };
+#endif

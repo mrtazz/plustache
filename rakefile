@@ -28,16 +28,28 @@ BIN_OBJECTS = BIN_FILES.collect { |fn|
                                 }
 
 # include dirs
-INCLUDE_DIRS = ["include", "/usr/local/homebrew/include"]
+INCLUDE_DIRS = ["include"]
+LDFLAGS = []
+
+res = %x[uname].chomp
+if res == "Darwin"
+  INCLUDE_DIRS.push("/usr/local/homebrew/include")
+  LDFLAGS.push("-L/usr/local/homebrew/lib")
+elsif res == "Linux"
+  puts "Linux"
+  INCLUDE_DIRS.push("/usr/include")
+  LDFLAGS.push("-L/usr/lib")
+end
 
 # compiler/linker stuff
 CC = "g++"
 LD = "g++"
-CCFLAGS = ["-O3","-wall", "-I #{INCLUDE_DIRS.join(" -I")}"]
-LDFLAGS = ["-L/usr/local/homebrew/lib"]
+CCFLAGS = ["-O3","-Wall", "-I #{INCLUDE_DIRS.join(" -I")}"]
+
+
 
 # task definitions
-task :default => :test
+task :default => [:test]
 
 desc "task for compiling and executing unit tests"
 task :test => TEST do

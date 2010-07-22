@@ -75,6 +75,16 @@ Render the template:
     template_t t;
     string result = t.render(template, ctx);
 
+## Supported Functionality (as described in [the man page](http://mustache.github.com/mustache.5.html))
+* Variables
+* Sections
+  * False Values/Empty Lists
+  * Non-Empty-Lists
+* Inverted Sections
+* Comments
+* Partials
+* Set Delimiter
+
 ## TODO
 * plustache executable
 

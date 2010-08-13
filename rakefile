@@ -50,11 +50,20 @@ DYNFLAGS = ["-dynamiclib"]
 
 
 # task definitions
-task :default => [:test]
+task :default => "test:unit"
 
-desc "task for compiling and executing unit tests"
-task :test => TEST do
-  sh "./#{TEST}"
+namespace :test do
+
+  desc "task for compiling and executing unit tests"
+  task :unit => TEST do
+    sh "./#{TEST}"
+  end
+
+  desc "task for style and error checking with cppcheck"
+  task :style do
+    sh "cppcheck --enable=all src/"
+  end
+
 end
 
 desc "task compiling plustache binary"

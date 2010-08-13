@@ -36,7 +36,6 @@ if res == "Darwin"
   INCLUDE_DIRS.push("/usr/local/homebrew/include")
   LDFLAGS.push("-L/usr/local/homebrew/lib")
 elsif res == "Linux"
-  puts "Linux"
   INCLUDE_DIRS.push("/usr/include")
   LDFLAGS.push("-L/usr/lib")
 end

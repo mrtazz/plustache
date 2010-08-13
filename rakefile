@@ -7,6 +7,7 @@ require 'rake/loaders/makefile'
 APPLICATION = 'bin/plustache'
 TEST = 'bin/plustache_tests'
 STATIC_LIB = 'lib/libplustache.a'
+DYNAMIC_LIB = 'lib/libplustache.dylib'
 # directories
 BINDIR = "bin"
 OBJDIR = "build"
@@ -43,7 +44,8 @@ end
 # compiler/linker stuff
 CC = "g++"
 LD = "g++"
-CCFLAGS = ["-O3","-Wall", "-I #{INCLUDE_DIRS.join(" -I")}"]
+CCFLAGS = ["-O3","-Wall", "-fPIC", "-I #{INCLUDE_DIRS.join(" -I")}"]
+DYNFLAGS = ["-dynamiclib"]
 
 
 
@@ -63,6 +65,12 @@ end
 desc "task for compiling static plustache library"
 task :static => STATIC_LIB do
 end
+
+desc "task for compiling dynamic plustache library"
+task :dynamic => DYNAMIC_LIB do
+end
+
+
 # generate dependencies
 file '.depend.mf' do
   sh "g++ -M -MF .depend.mf -I #{INCLUDE_DIRS.join(' -I')} \
@@ -93,6 +101,14 @@ file STATIC_LIB => LIBDIR
 file STATIC_LIB => SRC_OBJECTS do |t|
   sh "ar rcs #{STATIC_LIB} #{SRC_OBJECTS}"
 end
+#
+# rules for static library
+directory LIBDIR
+file DYNAMIC_LIB => LIBDIR
+file DYNAMIC_LIB => SRC_OBJECTS do |t|
+  sh "#{LD} #{DYNFLAGS.join(" ")} -o #{DYNAMIC_LIB} #{SRC_OBJECTS} -lboost_regex-mt"
+end
+
 # compile rules for object files
 directory OBJDIR
 (TEST_FILES+SRC_FILES+BIN_FILES).each do |srcfile|

@@ -75,6 +75,20 @@ Render the template:
     template_t t;
     string result = t.render(template, ctx);
 
+
+## Installation
+Clone this repository:
+
+    git clone git://github.com/mrtazz/plustache.git
+
+Run the install task:
+
+    rake install prefix=installfolder
+
+This creates a dynamic library (OSX only at the moment) and
+copies the header files and library into $prefix/include and
+$prefix/lib respectively.
+
 ## Supported Functionality (as described in [the man page](http://mustache.github.com/mustache.5.html))
 * Variables
 * Sections

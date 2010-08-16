@@ -4,10 +4,9 @@ require 'rake/clean'
 require 'rake/loaders/makefile'
 
 # binaries
-APPLICATION = 'bin/plustache'
-TEST = 'bin/plustache_tests'
-STATIC_LIB = 'lib/libplustache.a'
-DYNAMIC_LIB = 'lib/libplustache.dylib'
+APPLICATION = "bin/plustache"
+TEST = "bin/plustache_tests"
+STATIC_LIB = "lib/libplustache.a"
 # directories
 BINDIR = "bin"
 OBJDIR = "build"
@@ -34,8 +33,8 @@ LDFLAGS = []
 
 res = %x[uname].chomp
 if res == "Darwin"
-  INCLUDE_DIRS.push("/usr/local/homebrew/include")
-  LDFLAGS.push("-L/usr/local/homebrew/lib")
+  DYNFLAGS = ["-dynamiclib"]
+  DYNAMIC_LIB = "lib/libplustache.dylib"
 elsif res == "Linux"
   INCLUDE_DIRS.push("/usr/include")
   LDFLAGS.push("-L/usr/lib")
@@ -45,8 +44,6 @@ end
 CC = "g++"
 LD = "g++"
 CCFLAGS = ["-O3","-Wall", "-fPIC", "-I #{INCLUDE_DIRS.join(" -I")}"]
-DYNFLAGS = ["-dynamiclib"]
-
 
 
 # task definitions

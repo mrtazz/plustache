@@ -3,6 +3,9 @@
 require 'rake/clean'
 require 'rake/loaders/makefile'
 
+# install prefix
+PREFIX = "./"
+
 # binaries
 APPLICATION = "bin/plustache"
 TEST = "bin/plustache_tests"
@@ -60,6 +63,20 @@ namespace :test do
   task :style do
     sh "cppcheck --enable=all src/"
   end
+
+end
+
+desc "install plustache as dynamic library"
+task :install => :dynamic do
+  prefix = ENV['PREFIX'] || ENV['prefix'] || PREFIX
+
+  FileUtils.mkdir_p "#{prefix}/include"
+  FileUtils.cp "include/template.hpp", "#{prefix}/include"
+  FileUtils.cp "include/context.hpp", "#{prefix}/include"
+  FileUtils.cp "include/plustache_types.hpp", "#{prefix}/include"
+
+  FileUtils.mkdir_p "#{prefix}/lib"
+  FileUtils.cp "#{DYNAMIC_LIB}", "#{prefix}/lib"
 
 end
 

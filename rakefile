@@ -10,6 +10,7 @@ PREFIX = "./"
 APPLICATION = "bin/plustache"
 TEST = "bin/plustache_tests"
 STATIC_LIB = "lib/libplustache.a"
+DYNAMIC_LIB = ""
 # directories
 BINDIR = "bin"
 OBJDIR = "build"

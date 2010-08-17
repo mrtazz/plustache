@@ -89,6 +89,10 @@ This creates a dynamic library (OSX only at the moment) and
 copies the header files and library into $prefix/include and
 $prefix/lib respectively.
 
+Or you can get it via [homebrew](http://github.com/mxcl/homebrew):
+
+    brew install plustache
+
 ## Supported Functionality (as described in [the man page](http://mustache.github.com/mustache.5.html))
 * Variables
 * Sections

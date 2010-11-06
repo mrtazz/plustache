@@ -32,7 +32,7 @@ BIN_OBJECTS = BIN_FILES.collect { |fn|
                                 }
 
 # include dirs
-INCLUDE_DIRS = ["include"]
+INCLUDE_DIRS = ["."]
 LDFLAGS = []
 
 res = %x[uname].chomp

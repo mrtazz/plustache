@@ -1,21 +1,24 @@
-#include "include/template.hpp"
+#include <string>
 #include <iostream>
 #include <fstream>
 #include <gtest/gtest.h>
+
+#include "include/template.hpp"
+#include "include/plustache_types.hpp"
 
 // The fixture for testing class Foo.
 class HtmlEscapeTest : public ::testing::Test
 {
  protected:
-    string result_escaped_string;
-    string result_escaped_file;
-    string result_unescaped_string;
-    string result_unescaped_file;
-    string escaped_string;
-    string unescaped_string;
-    map<string, string> ctx;
-    string escaped_file;
-    string unescaped_file;
+    std::string result_escaped_string;
+    std::string result_escaped_file;
+    std::string result_unescaped_string;
+    std::string result_unescaped_file;
+    std::string escaped_string;
+    std::string unescaped_string;
+    PlustacheTypes::ObjectType ctx;
+    std::string escaped_file;
+    std::string unescaped_file;
 
     HtmlEscapeTest()
     {
@@ -65,7 +68,7 @@ class HtmlEscapeTest : public ::testing::Test
 // Tests that a simple mustache tag is replaced
 TEST_F(HtmlEscapeTest, TestHtmlEscapeMustacheFromString)
 {
-    string expected = "text &lt;pre&gt;&quot;&#92;&amp;foo&#92;&lt;\
+    std::string expected = "text &lt;pre&gt;&quot;&#92;&amp;foo&#92;&lt;\
 /pre&gt; text\n";
     expected += "text &lt;pre&gt;&quot;&#92;&#92;&amp;&lt;/pre&gt; text";
     EXPECT_EQ(expected, result_escaped_string);
@@ -73,7 +76,7 @@ TEST_F(HtmlEscapeTest, TestHtmlEscapeMustacheFromString)
 
 TEST_F(HtmlEscapeTest, TestHtmlEscapeMustacheFromFile)
 {
-    string expected = "text &lt;pre&gt;&quot;&#92;&amp;foo&#92;&lt;\
+    std::string expected = "text &lt;pre&gt;&quot;&#92;&amp;foo&#92;&lt;\
 /pre&gt; text\n";
     expected += "text &lt;pre&gt;&quot;&#92;&#92;&amp;&lt;/pre&gt; text";
     EXPECT_EQ(expected, result_escaped_file);
@@ -81,14 +84,14 @@ TEST_F(HtmlEscapeTest, TestHtmlEscapeMustacheFromFile)
 
 TEST_F(HtmlEscapeTest, TestHtmlUnEscapeMustacheFromString)
 {
-    string expected = "text <pre>\"\\&foo\\</pre> text\n";
+    std::string expected = "text <pre>\"\\&foo\\</pre> text\n";
     expected += "text <pre>\"\\\\&</pre> text";
     EXPECT_EQ(expected, result_unescaped_string);
 }
 
 TEST_F(HtmlEscapeTest, TestHtmlUnEscapeMustacheFromFile)
 {
-    string expected = "text <pre>\"\\&foo\\</pre> text\n";
+    std::string expected = "text <pre>\"\\&foo\\</pre> text\n";
     expected += "text <pre>\"\\\\&</pre> text";
     EXPECT_EQ(expected, result_unescaped_file);
 }

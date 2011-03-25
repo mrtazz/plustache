@@ -1,17 +1,20 @@
-#include "include/template.hpp"
+#include <string>
 #include <iostream>
 #include <fstream>
 #include <gtest/gtest.h>
+
+#include "include/template.hpp"
+#include "include/plustache_types.hpp"
 
 // The fixture for testing class Foo.
 class NestedSectionsTest : public ::testing::Test
 {
  protected:
-    string result_string;
-    string result_file;
-    string template_string;
-    map<string, string> ctx;
-    string file;
+    std::string result_string;
+    std::string result_file;
+    std::string template_string;
+    PlustacheTypes::ObjectType ctx;
+    std::string file;
 
     NestedSectionsTest()
     {
@@ -32,7 +35,7 @@ class NestedSectionsTest : public ::testing::Test
         template_string += "{{/ showme}}";
         file = "sections.mustache";
 
-        ofstream myfile;
+        std::ofstream myfile;
         myfile.open (file.c_str());
         myfile << template_string;
         myfile.close();
@@ -56,7 +59,7 @@ class NestedSectionsTest : public ::testing::Test
 // Tests that a simple mustache tag is replaced
 TEST_F(NestedSectionsTest, TestSectionMustacheFromString)
 {
-    string expected = "Hi I am Daniel.\n";
+    std::string expected = "Hi I am Daniel.\n";
           expected += "I like turtles.\n";
           expected += "If you don't see this, something went wrong.";
     EXPECT_EQ(expected, result_string);
@@ -64,7 +67,7 @@ TEST_F(NestedSectionsTest, TestSectionMustacheFromString)
 
 TEST_F(NestedSectionsTest, TestSectionMustacheFromFile)
 {
-    string expected = "Hi I am Daniel.\n";
+    std::string expected = "Hi I am Daniel.\n";
           expected += "I like turtles.\n";
           expected += "If you don't see this, something went wrong.";
     EXPECT_EQ(expected, result_file);

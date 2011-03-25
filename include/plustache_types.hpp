@@ -3,15 +3,17 @@
  * @brief header file for plustache types
  * @author Daniel Schauenberg <d@unwiredcouch.com>
  */
-#ifndef PLUSTACHE_TYPES_H
-#define PLUSTACHE_TYPES_H
+#ifndef PLUSTACHE_TYPES_H_
+#define PLUSTACHE_TYPES_H_
+
 #include <string>
 #include <map>
 #include <vector>
 
-using namespace std;
+namespace PlustacheTypes {
+/* typedefs */
+typedef std::map<std::string, std::string> ObjectType;
+typedef std::vector<ObjectType> CollectionType;
+}
 
-/* defines */
-typedef vector< map<string, string> > CollectionType;
-typedef map<string, string> ObjectType;
 #endif

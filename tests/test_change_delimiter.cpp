@@ -1,18 +1,22 @@
-#include "include/template.hpp"
+#include <string>
+#include <map>
 #include <iostream>
 #include <fstream>
 #include <gtest/gtest.h>
+
+#include "include/template.hpp"
+#include "include/plustache_types.hpp"
 
 // The fixture for testing class Foo.
 class ChangeDelimiterTest : public ::testing::Test
 {
  protected:
-    string result_string;
-    string result_file;
-    string template_string;
-    string result_notfound;
-    map<string, string> ctx;
-    string file;
+    std::string result_string;
+    std::string result_file;
+    std::string template_string;
+    std::string result_notfound;
+    PlustacheTypes::ObjectType ctx;
+    std::string file;
 
     ChangeDelimiterTest()
     {
@@ -53,14 +57,14 @@ class ChangeDelimiterTest : public ::testing::Test
 // Tests that a simple mustache tag is replaced
 TEST_F(ChangeDelimiterTest, TestChangeDelimiterFromString)
 {
-    string expected = "Hi I am Daniel.\n";
+    std::string expected = "Hi I am Daniel.\n";
            expected += "I like turtles.";
     EXPECT_EQ(expected, result_string);
 }
 
 TEST_F(ChangeDelimiterTest, TestChangeDelimiterFromFile)
 {
-    string expected = "Hi I am Daniel.\n";
+    std::string expected = "Hi I am Daniel.\n";
            expected += "I like turtles.";
     EXPECT_EQ(expected, result_file);
 }

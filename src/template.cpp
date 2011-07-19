@@ -4,7 +4,14 @@
  * @author Daniel Schauenberg <d@unwiredcouch.com>
  */
 
-#include <template.hpp>
+#include "include/template.hpp"
+
+#include <string>
+#include <boost/regex.hpp>
+#include <boost/algorithm/string/trim.hpp>
+
+#include "include/plustache_types.hpp"
+#include "include/context.hpp"
 
 /**
  * @brief constructor taking no arguments
@@ -21,7 +28,7 @@ template_t::template_t()
  *
  * @param tmpl_path path to the template directory
  */
-template_t::template_t(string tmpl_path)
+template_t::template_t(std::string& tmpl_path)
 {
     template_path = tmpl_path;
 }
@@ -37,7 +44,7 @@ void template_t::compile_data()
     escape_lut[">"] = "&gt;";
     escape_lut["\\"] = "&#92;";
     escape_lut["\""] = "&quot;";
-    // regex for what to escape in a html string
+    // regex for what to escape in a html std::string
     escape_chars.assign("(<|>|\"|\\\\|&)");
     otag = "\\{\\{";
     ctag = "\\}\\}";
@@ -58,45 +65,48 @@ template_t::~template_t()
 /**
  * @brief method to render tags with a given map
  *
- * @param tmplate template string to render
+ * @param tmplate template std::string to render
  * @param ctx map of values
  *
- * @return rendered string
+ * @return rendered std::string
  */
-string template_t::render_tags(string tmplate, context ctx)
+std::string template_t::render_tags(const std::string& tmplate,
+                                    const Context& ctx)
 {
     // initialize data
-    string ret = "";
-    string rest = "";
-    string::const_iterator start, end;
-    match_results<std::string::const_iterator> matches;
+    std::string ret = "";
+    std::string rest = "";
+    std::string::const_iterator start, end;
+    boost::match_results<std::string::const_iterator> matches;
     start = tmplate.begin();
     end = tmplate.end();
-    // return whole string when no tags are found
-    if (!regex_search(start, end, matches, tag, match_default | format_all))
+    // return whole std::string when no tags are found
+    if (!regex_search(start, end, matches, tag,
+                      boost::match_default | boost::format_all))
     {
         ret = tmplate;
     }
     // loop through tags and replace
-    while (regex_search(start, end, matches, tag, match_default | format_all))
+    while (regex_search(start, end, matches, tag,
+                        boost::match_default | boost::format_all))
     {
-        string modifier(matches[1].first, matches[1].second);
-        string key(matches[2].first, matches[2].second);
-        algorithm::trim(key);
-        algorithm::trim(modifier);
-        string text(start, matches[0].second);
-        string repl;
+        std::string modifier(matches[1].first, matches[1].second);
+        std::string key(matches[2].first, matches[2].second);
+        boost::algorithm::trim(key);
+        boost::algorithm::trim(modifier);
+        std::string text(start, matches[0].second);
+        std::string repl;
         // don't html escape this
         if (modifier == "&" || modifier == "{")
         {
             try
             {
                 // get value
-                string s = ctx.get(key)[0][key];
-                // escape backslash in string
-                const string f = "\\";
+                std::string s = ctx.get(key)[0][key];
+                // escape backslash in std::string
+                const std::string f = "\\";
                 size_t found = s.find(f);
-                while(found != string::npos)
+                while(found != std::string::npos)
                 {
                     s.replace(found,f.length(),"\\\\");
                     found = s.find(f, found+2);
@@ -113,7 +123,8 @@ string template_t::render_tags(string tmplate, context ctx)
         // found a partial
         else if (modifier == ">")
         {
-            repl.assign(template_t::render(template_t::get_partial(key), ctx));
+            std::string partial = template_t::get_partial(key);
+            repl.assign(template_t::render(partial, ctx));
         }
         // normal tag
         else
@@ -126,24 +137,25 @@ string template_t::render_tags(string tmplate, context ctx)
         }
 
         // replace
-        ret += regex_replace(text, tag, repl, match_default | format_all);
+        ret += regex_replace(text, tag, repl,
+                             boost::match_default | boost::format_all);
         // change delimiter after was removed
         if (modifier == "=")
         {
           // regex for finding delimiters
-          regex delim("(.+?) (.+?)=");
+          boost::regex delim("(.+?) (.+?)=");
           // match object
-          match_results<std::string::const_iterator> delim_m;
+          boost::match_results<std::string::const_iterator> delim_m;
           // search for the delimiters
-          regex_search(matches[2].first, matches[2].second, delim_m, delim,
-                       match_default | format_all);
+          boost::regex_search(matches[2].first, matches[2].second, delim_m, delim,
+                              boost::match_default | boost::format_all);
           // set new otag and ctag
-          string new_otag = delim_m[1];
-          string new_ctag = delim_m[2];
+          std::string new_otag = delim_m[1];
+          std::string new_ctag = delim_m[2];
           // change delimiters
           template_t::change_delimiter(new_otag, new_ctag);
         }
-        // set start for next tag and rest of string
+        // set start for next tag and rest of std::string
         rest.assign(matches[0].second, end);
         start = matches[0].second;
     }
@@ -155,39 +167,40 @@ string template_t::render_tags(string tmplate, context ctx)
 /**
  * @brief method to render sections with a given map
  *
- * @param tmplate template string to render
+ * @param tmplate template std::string to render
  * @param ctx map of values
  *
- * @return rendered string
+ * @return rendered std::string
  */
-string template_t::render_sections(string tmplate, context ctx)
+std::string template_t::render_sections(const std::string& tmplate,
+                                        const Context& ctx)
 {
     // initialize data structures
-    string ret = "";
-    string rest = "";
-    string::const_iterator start, end;
-    match_results<std::string::const_iterator> matches;
+    std::string ret = "";
+    std::string rest = "";
+    std::string::const_iterator start, end;
+    boost::match_results<std::string::const_iterator> matches;
     start = tmplate.begin();
     end = tmplate.end();
     // return the whole template if no sections are found
-    if (!regex_search(start, end, matches, section,
-                        match_default | format_all))
+    if (!boost::regex_search(start, end, matches, section,
+                             boost::match_default | boost::format_all))
     {
         ret = tmplate;
     }
     // loop through sections and render
-    while (regex_search(start, end, matches, section,
-                        match_default | format_all))
+    while (boost::regex_search(start, end, matches, section,
+                               boost::match_default | boost::format_all))
     {
-        // string assignments
-        string text(start, matches[0].second);
-        string key(matches[2].first, matches[2].second);
-        string modifier(matches[1]);
+        // std::string assignments
+        std::string text(start, matches[0].second);
+        std::string key(matches[2].first, matches[2].second);
+        std::string modifier(matches[1]);
         // trimming
-        algorithm::trim(key);
-        algorithm::trim(modifier);
-        string repl = "";
-        string show = "false";
+        boost::algorithm::trim(key);
+        boost::algorithm::trim(modifier);
+        std::string repl = "";
+        std::string show = "false";
         CollectionType values;
         values = ctx.get(key);
         if (values.size() == 1)
@@ -215,8 +228,8 @@ string template_t::render_sections(string tmplate, context ctx)
         // assign replacement content
         if (show == "true")
         {
-            if (regex_search(matches[3].first, matches[3].second,
-                             section, match_default | format_all))
+            if (boost::regex_search(matches[3].first, matches[3].second, section,
+                                    boost::match_default | boost::format_all))
             {
                 repl.assign(template_t::render_sections(matches[3], ctx));
             }
@@ -225,7 +238,7 @@ string template_t::render_sections(string tmplate, context ctx)
                 for(CollectionType::iterator it = values.begin();
                     it != values.end(); ++it)
                 {
-                  context small_ctx;
+                  Context small_ctx;
                   small_ctx = ctx;
                   small_ctx.add(*it);
                   repl += template_t::render_tags(matches[3], small_ctx);
@@ -233,7 +246,8 @@ string template_t::render_sections(string tmplate, context ctx)
             }
         }
         else repl.assign("");
-        ret += regex_replace(text, section, repl, match_default | format_all);
+        ret += boost::regex_replace(text, section, repl,
+                                    boost::match_default | boost::format_all);
         rest.assign(matches[0].second, end);
         start = matches[0].second;
     }
@@ -245,38 +259,39 @@ string template_t::render_sections(string tmplate, context ctx)
 /**
  * @brief method for rendering a template
  *
- * @param tmplate template to render as raw string or file path
+ * @param tmplate template to render as raw std::string or file path
  * @param ctx context object
  *
- * @return rendered string
+ * @return rendered std::string
  */
-string template_t::render(string tmplate, context ctx)
+std::string template_t::render(const std::string& tmplate, const Context& ctx)
 {
     // get template
-    string tmp = get_template(tmplate);
+    std::string tmp = get_template(tmplate);
 
-    string first = template_t::render_sections(tmp, ctx);
-    string second = template_t::render_tags(first, ctx);
+    std::string first = template_t::render_sections(tmp, ctx);
+    std::string second = template_t::render_tags(first, ctx);
     return second;
 }
 
 /**
  * @brief method for rendering a template
  *
- * @param tmplate template to render as raw string or filepath
+ * @param tmplate template to render as raw std::string or filepath
  * @param ctx map of values
  *
- * @return rendered string
+ * @return rendered std::string
  */
-string template_t::render(string tmplate, ObjectType ctx)
+std::string template_t::render(const std::string& tmplate,
+                               const ObjectType& ctx)
 {
     // get template
-    string tmp = get_template(tmplate);
-    context contxt;
+    std::string tmp = get_template(tmplate);
+    Context contxt;
     contxt.add(ctx);
 
-    string first = template_t::render_sections(tmp, contxt);
-    string second = template_t::render_tags(first, contxt);
+    std::string first = template_t::render_sections(tmp, contxt);
+    std::string second = template_t::render_tags(first, contxt);
     return second;
 }
 
@@ -286,38 +301,38 @@ string template_t::render(string tmplate, ObjectType ctx)
 
 
 /**
- * @brief method to escape html strings
+ * @brief method to escape html std::strings
  *
- * @param s string to escape
+ * @param s std::string to escape
  *
- * @return escaped string
+ * @return escaped std::string
  */
-string template_t::html_escape(string s)
+std::string template_t::html_escape(const std::string& s)
 {
-    /** initialize working strings and iterators */
-    string ret = "";
-    string rest = "";
-    string::const_iterator start, end;
-    match_results<std::string::const_iterator> matches;
+    /** initialize working std::strings and iterators */
+    std::string ret = "";
+    std::string rest = "";
+    std::string::const_iterator start, end;
+    boost::match_results<std::string::const_iterator> matches;
     start = s.begin();
     end = s.end();
-    // return original string if nothing is found
-    if (!regex_search(start, end, matches, escape_chars,
-                        match_default | format_all))
+    // return original std::string if nothing is found
+    if (!boost::regex_search(start, end, matches, escape_chars,
+                             boost::match_default | boost::format_all))
     {
         ret = s;
     }
     // search for html chars
-    while (regex_search(start, end, matches, escape_chars,
-                        match_default | format_all))
+    while (boost::regex_search(start, end, matches, escape_chars,
+                               boost::match_default | boost::format_all))
     {
-        string key(matches[0].first, matches[0].second);
-        string text(start, matches[0].second);
-        algorithm::trim(key);
-        string repl;
+        std::string key(matches[0].first, matches[0].second);
+        std::string text(start, matches[0].second);
+        boost::algorithm::trim(key);
+        std::string repl;
         repl = escape_lut[key];
-        ret += regex_replace(text, escape_chars, repl,
-                             match_default | format_all);
+        ret += boost::regex_replace(text, escape_chars, repl,
+                                    boost::match_default | boost::format_all);
         rest.assign(matches[0].second, end);
         start = matches[0].second;
     }
@@ -331,31 +346,31 @@ string template_t::html_escape(string s)
  *
  * @param s name of the partial to load
  *
- * @return partial template as string
+ * @return partial template as std::string
  */
-string template_t::get_partial(string partial)
+std::string template_t::get_partial(const std::string& partial) const
 {
-    string ret = "";
-    string file_with_path = template_path;
-    partial += ".mustache";
+    std::string ret = "";
+    std::string file_with_path = template_path;
     file_with_path += partial;
+    file_with_path += ".mustache";
     // file path with template path prefix
-    ifstream extended_file(file_with_path.c_str());
+    std::ifstream extended_file(file_with_path.c_str());
     // true if it was a valid file path
     if (extended_file.is_open())
     {
-        ret.assign((istreambuf_iterator<char>(extended_file)),
-                    istreambuf_iterator<char>());
+        ret.assign((std::istreambuf_iterator<char>(extended_file)),
+                    std::istreambuf_iterator<char>());
         extended_file.close();
     }
     else
     {
         // file path without prefix
-        ifstream file(partial.c_str());
+        std::ifstream file(partial.c_str());
         if(file.is_open())
         {
-          ret.assign((istreambuf_iterator<char>(file)),
-                      istreambuf_iterator<char>());
+          ret.assign((std::istreambuf_iterator<char>(file)),
+                      std::istreambuf_iterator<char>());
           file.close();
         }
     }
@@ -368,7 +383,8 @@ string template_t::get_partial(string partial)
  * @param opentag delimiter for open tag
  * @param closetag delimiter for closed tag
  */
-void template_t::change_delimiter(string opentag, string closetag)
+void template_t::change_delimiter(const std::string& opentag,
+                                  const std::string& closetag)
 {
     otag = opentag;
     ctag = closetag;
@@ -383,26 +399,26 @@ void template_t::change_delimiter(string opentag, string closetag)
  *
  * @param tmpl path to template or template directory
  *
- * @return template as string
+ * @return template as std::string
  */
-string template_t::get_template(string tmpl)
+std::string template_t::get_template(const std::string& tmpl)
 {
-    // string to hold the template
-    string tmp = "";
-    ifstream file(tmpl.c_str());
-    ifstream file_from_tmpl_dir((template_path + tmpl).c_str());
+    // std::string to hold the template
+    std::string tmp = "";
+    std::ifstream file(tmpl.c_str());
+    std::ifstream file_from_tmpl_dir((template_path + tmpl).c_str());
     // true if it was a valid local file path
     if (file.is_open())
     {
-        tmp.assign((istreambuf_iterator<char>(file)),
-                    istreambuf_iterator<char>());
+        tmp.assign((std::istreambuf_iterator<char>(file)),
+                    std::istreambuf_iterator<char>());
         file.close();
     }
     // maybe the template is in the standard directory
     else if (file_from_tmpl_dir.is_open())
     {
-        tmp.assign((istreambuf_iterator<char>(file_from_tmpl_dir)),
-                    istreambuf_iterator<char>());
+        tmp.assign((std::istreambuf_iterator<char>(file_from_tmpl_dir)),
+                    std::istreambuf_iterator<char>());
         file_from_tmpl_dir.close();
 
     }

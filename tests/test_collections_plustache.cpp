@@ -1,17 +1,21 @@
-#include "template.hpp"
+#include <string>
 #include <iostream>
 #include <fstream>
 #include <gtest/gtest.h>
+
+#include "include/template.hpp"
+#include "include/context.hpp"
+#include "include/plustache_types.hpp"
 
 // The fixture for testing class Foo.
 class CollectionsTest : public ::testing::Test
 {
  protected:
-    string result_single;
-    string result_multiple;
-    string result_multiple_fields;
-    string template_string;
-    string template_single_string;
+    std::string result_single;
+    std::string result_multiple;
+    std::string result_multiple_fields;
+    std::string template_string;
+    std::string template_single_string;
 
     CollectionsTest()
     {
@@ -33,28 +37,28 @@ class CollectionsTest : public ::testing::Test
         template_single_string += "{{/ people}}";
 
         // single entry
-        ObjectType tom;
-        ObjectType jerry;
+        PlustacheTypes::ObjectType tom;
+        PlustacheTypes::ObjectType jerry;
         tom["name"] = "Tom";
-        context ctx_single;
+        Context ctx_single;
         ctx_single.add("me", "Daniel");
         ctx_single.add("people",tom);
 
         // multiple entries
         jerry["name"] = "Jerry";
-        CollectionType b_multiple;
+        PlustacheTypes::CollectionType b_multiple;
         b_multiple.push_back(tom);
         b_multiple.push_back(jerry);
-        context ctx_multiple;
+        Context ctx_multiple;
         ctx_multiple.add("me", "Daniel");
         ctx_multiple.add("people", b_multiple);
 
         // multiple fields
         tom["work"] = "Accounting";
         jerry["work"] = "Magic";
-        CollectionType b_multiple_fields;
+        PlustacheTypes::CollectionType b_multiple_fields;
         b_multiple_fields.push_back(tom);
-        context ctx;
+        Context ctx;
         ctx.add("me", "Daniel");
         ctx.add("people", b_multiple_fields);
         ctx.add("people", jerry);
@@ -76,14 +80,14 @@ class CollectionsTest : public ::testing::Test
 // Tests that a simple mustache tag is replaced
 TEST_F(CollectionsTest, TestCollectionsSingle)
 {
-    string expected = "Hi I am Daniel.\n";
+    std::string expected = "Hi I am Daniel.\n";
           expected += "Hi Tom!";
     EXPECT_EQ(expected, result_single);
 }
 
 TEST_F(CollectionsTest, TestCollectionsMultiple)
 {
-    string expected = "Hi I am Daniel.\n";
+    std::string expected = "Hi I am Daniel.\n";
           expected += "Hi Tom!";
           expected += "Hi Jerry!";
     EXPECT_EQ(expected, result_multiple);
@@ -91,7 +95,7 @@ TEST_F(CollectionsTest, TestCollectionsMultiple)
 
 TEST_F(CollectionsTest, TestCollectionMultipleWithMultipleFields)
 {
-    string expected = "Hi I am Daniel.\n";
+    std::string expected = "Hi I am Daniel.\n";
         expected += "Hi Daniel, I am Tom, I do Accounting.";
         expected += "Hi Daniel, I am Jerry, I do Magic.";
     EXPECT_EQ(expected, result_multiple_fields);

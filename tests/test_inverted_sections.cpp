@@ -1,17 +1,20 @@
-#include "template.hpp"
+#include <string>
 #include <iostream>
 #include <fstream>
 #include <gtest/gtest.h>
+
+#include "include/template.hpp"
+#include "include/plustache_types.hpp"
 
 // The fixture for testing class Foo.
 class InvertedSectionsTest : public ::testing::Test
 {
  protected:
-    string result_string;
-    string result_file;
-    string template_string;
-    map<string, string> ctx;
-    string file;
+    std::string result_string;
+    std::string result_file;
+    std::string template_string;
+    PlustacheTypes::ObjectType ctx;
+    std::string file;
 
     InvertedSectionsTest()
     {
@@ -38,7 +41,7 @@ class InvertedSectionsTest : public ::testing::Test
         template_string += "{{/ stealth}}";
         file = "sections.mustache";
 
-        ofstream myfile;
+        std::ofstream myfile;
         myfile.open (file.c_str());
         myfile << template_string;
         myfile.close();
@@ -63,7 +66,7 @@ class InvertedSectionsTest : public ::testing::Test
 // Tests that a simple mustache tag is replaced
 TEST_F(InvertedSectionsTest, TestInvertedSectionMustacheFromString)
 {
-    string expected = "Hi I am Daniel.\n";
+    std::string expected = "Hi I am Daniel.\n";
           expected += "I like turtles.";
           expected += "Hope you can see me.";
           expected += "me too.";
@@ -72,7 +75,7 @@ TEST_F(InvertedSectionsTest, TestInvertedSectionMustacheFromString)
 
 TEST_F(InvertedSectionsTest, TestInvertedSectionMustacheFromFile)
 {
-    string expected = "Hi I am Daniel.\n";
+    std::string expected = "Hi I am Daniel.\n";
           expected += "I like turtles.";
           expected += "Hope you can see me.";
           expected += "me too.";

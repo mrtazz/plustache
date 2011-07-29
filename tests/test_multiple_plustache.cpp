@@ -1,18 +1,21 @@
-#include "template.hpp"
+#include <string>
 #include <iostream>
 #include <fstream>
 #include <gtest/gtest.h>
+
+#include "include/template.hpp"
+#include "include/plustache_types.hpp"
 
 // The fixture for testing class Foo.
 class MultipleTest : public ::testing::Test
 {
  protected:
-    string result_string;
-    string result_file;
-    string template_string;
-    string expected;
-    map<string, string> ctx;
-    string file;
+    std::string result_string;
+    std::string result_file;
+    std::string template_string;
+    std::string expected;
+    PlustacheTypes::ObjectType ctx;
+    std::string file;
     MultipleTest()
     {
     }

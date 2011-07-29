@@ -11,38 +11,40 @@
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/regex.hpp>
 
-#include <plustache_types.hpp>
-#include <context.hpp>
-
-using namespace std;
-using namespace boost;
+#include "include/plustache_types.hpp"
+#include "include/context.hpp"
 
 class template_t {
+  typedef PlustacheTypes::ObjectType ObjectType;
+  typedef PlustacheTypes::CollectionType CollectionType;
 public:
     template_t ();
-    template_t (string tmpl_path);
+    template_t (std::string& tmpl_path);
     ~template_t ();
-    string render(string tmplate, context ctx);
-    string render(string tmplate, ObjectType ctx);
+    std::string render(const std::string& tmplate, const Context& ctx);
+    std::string render(const std::string& tmplate, const ObjectType& ctx);
 
 private:
-    string template_path;
+    std::string template_path;
     /* opening and closing tags */
-    string otag;
-    string ctag;
+    std::string otag;
+    std::string ctag;
     /* regex */
-    regex tag;
-    regex section;
-    regex escape_chars;
+    boost::regex tag;
+    boost::regex section;
+    boost::regex escape_chars;
     /* lut for HTML escape chars */
-    map<string, string> escape_lut;
+    std::map<std::string, std::string> escape_lut;
     /* render and helper methods */
-    string render_tags(string tmplate, context ctx);
-    string render_sections(string tmplate, context ctx);
-    string html_escape(string s);
-    string get_partial(string partial);
-    void change_delimiter(string opentag, string closetag);
+    std::string render_tags(const std::string& tmplate,
+                            const Context& ctx);
+    std::string render_sections(const std::string& tmplate,
+                                const Context& ctx);
+    std::string html_escape(const std::string& s);
+    std::string get_partial(const std::string& partial) const;
+    void change_delimiter(const std::string& opentag,
+                          const std::string& closetag);
     void compile_data();
-    string get_template(string tmpl);
+    std::string get_template(const std::string& tmpl);
 };
 #endif

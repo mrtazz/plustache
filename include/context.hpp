@@ -5,24 +5,22 @@
  */
 #ifndef PLUSTACHE_CONTEXT_H
 #define PLUSTACHE_CONTEXT_H
+
 #include <iostream>
-#include "plustache_types.hpp"
+#include "include/plustache_types.hpp"
 
-using namespace std;
-
-
-class context {
+class Context {
 public:
-    context ();
-    ~context ();
-    int add(string key, string value);
-    int add(string key, CollectionType c);
-    int add(string key, ObjectType o);
-    int add(ObjectType o);
-    CollectionType get(string key);
+    Context ();
+    ~Context ();
+    int add(const std::string& key, const std::string& value);
+    int add(const std::string& key, PlustacheTypes::CollectionType& c);
+    int add(const std::string& key, const PlustacheTypes::ObjectType& o);
+    int add(const PlustacheTypes::ObjectType& o);
+    PlustacheTypes::CollectionType get(const std::string& key) const;
 
 private:
     /* data */
-    map<string, CollectionType> ctx;
+    std::map<std::string, PlustacheTypes::CollectionType> ctx;
 };
 #endif

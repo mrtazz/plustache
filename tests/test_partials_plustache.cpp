@@ -1,19 +1,22 @@
-#include "template.hpp"
+#include <string>
 #include <iostream>
 #include <fstream>
 #include <gtest/gtest.h>
+
+#include "include/template.hpp"
+#include "include/plustache_types.hpp"
 
 // The fixture for testing class Foo.
 class PartialsTest : public ::testing::Test
 {
  protected:
-    string result_string;
-    string result_file;
-    string template_string;
-    string partial_string;
-    map<string, string> ctx;
-    string file;
-    string partial_file;
+    std::string result_string;
+    std::string result_file;
+    std::string template_string;
+    std::string partial_string;
+    PlustacheTypes::ObjectType ctx;
+    std::string file;
+    std::string partial_file;
 
     PartialsTest()
     {
@@ -34,7 +37,7 @@ class PartialsTest : public ::testing::Test
         file = "sections.mustache";
         partial_file = "next_more.mustache";
 
-        ofstream myfile;
+        std::ofstream myfile;
         // write template to file
         myfile.open (file.c_str());
         myfile << template_string;
@@ -64,7 +67,7 @@ class PartialsTest : public ::testing::Test
 // Tests that a simple mustache tag is replaced
 TEST_F(PartialsTest, TestPartialsFromString)
 {
-    string expected = "Hi I am Daniel.\n";
+    std::string expected = "Hi I am Daniel.\n";
           expected += "I like turtles.\n";
           expected += "What do I like? Turtles!!";
     EXPECT_EQ(expected, result_string);
@@ -72,7 +75,7 @@ TEST_F(PartialsTest, TestPartialsFromString)
 
 TEST_F(PartialsTest, TestPartialsMustacheFromFile)
 {
-    string expected = "Hi I am Daniel.\n";
+    std::string expected = "Hi I am Daniel.\n";
           expected += "I like turtles.\n";
           expected += "What do I like? Turtles!!";
     EXPECT_EQ(expected, result_file);

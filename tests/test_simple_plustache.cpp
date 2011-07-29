@@ -1,19 +1,22 @@
-#include "template.hpp"
+#include <string>
+#include <map>
 #include <iostream>
 #include <fstream>
 #include <gtest/gtest.h>
+
+#include "include/template.hpp"
 
 // The fixture for testing class Foo.
 class SimpleTest : public ::testing::Test
 {
  protected:
-    string result_string;
-    string result_file;
-    string template_string;
-    string result_notfound;
-    string notfound;
-    map<string, string> ctx;
-    string file;
+    std::string result_string;
+    std::string result_file;
+    std::string template_string;
+    std::string result_notfound;
+    std::string notfound;
+    std::map<std::string, std::string> ctx;
+    std::string file;
 
     SimpleTest()
     {
@@ -51,17 +54,17 @@ class SimpleTest : public ::testing::Test
 // Tests that a simple mustache tag is replaced
 TEST_F(SimpleTest, TestSimpleMustacheFromString)
 {
-    const string expected = "text replaced text";
+    const std::string expected = "text replaced text";
     EXPECT_EQ(expected, result_string);
 }
 
 TEST_F(SimpleTest, TestSimpleMustacheFromFile)
 {
-    const string expected = "text replaced text";
+    const std::string expected = "text replaced text";
     EXPECT_EQ(expected, result_file);
 }
 TEST_F(SimpleTest, TestSimpleNotFoundMustacheFromString)
 {
-    const string expected = "text  text";
+    const std::string expected = "text  text";
     EXPECT_EQ(expected, result_notfound);
 }

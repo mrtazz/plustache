@@ -55,6 +55,14 @@ task :default => "test:unit"
 
 namespace :test do
 
+  CCFLAGS.delete "-O3"
+  CCFLAGS << "-O0"
+  CCFLAGS << "-g"
+  CCFLAGS << "--coverage"
+  CCFLAGS << "-fprofile-arcs"
+  CCFLAGS << "-ftest-coverage"
+  LDFLAGS << "-fprofile-arcs"
+
   desc "task for compiling and executing unit tests"
   task :unit => TEST do
     sh "./#{TEST}"
@@ -63,6 +71,11 @@ namespace :test do
   desc "task for style and error checking with cppcheck"
   task :style do
     sh "cppcheck -I . --xml --enable=all src/ 2> cppcheck.xml"
+  end
+
+  desc "task for generating coverage xml report"
+  task :coverage => TEST do
+    sh "./utils/gcovr -r . -e *test* -x > coverage.xml"
   end
 
 end
@@ -143,6 +156,6 @@ directory OBJDIR
 end
 
 # cleaning tasks
-CLEAN.include("**/*.o", ".depend.mf", OBJDIR)
-CLOBBER.include("**/*.o", APPLICATION, TEST, ".depend.mf", OBJDIR, BINDIR, LIBDIR)
+CLEAN.include("**/*.o", "*.xml", ".depend.mf", OBJDIR)
+CLOBBER.include("**/*.o", "*.xml", APPLICATION, TEST, ".depend.mf", OBJDIR, BINDIR, LIBDIR)
 

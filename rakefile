@@ -62,7 +62,7 @@ namespace :test do
 
   desc "task for style and error checking with cppcheck"
   task :style do
-    sh "cppcheck -I #{INCLUDE_DIRS.join(" -I ")} --enable=all src/"
+    sh "cppcheck -I . --xml --enable=all src/ 2> cppcheck.xml"
   end
 
 end

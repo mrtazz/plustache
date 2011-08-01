@@ -65,7 +65,7 @@ namespace :test do
 
   desc "task for compiling and executing unit tests"
   task :unit => TEST do
-    sh "./#{TEST}"
+    sh "./#{TEST} --gtest_output=xml:test.xml"
   end
 
   desc "task for style and error checking with cppcheck"

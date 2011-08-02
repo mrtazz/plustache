@@ -78,7 +78,7 @@ namespace :test do
 
   desc "task for generating coverage xml report"
   task :coverage => TEST do
-    sh "./utils/gcovr -r . -e *test* -x > coverage.xml"
+    sh "./utils/gcovr -r . -e 'tests' -x -o coverage.xml"
   end
 
 end

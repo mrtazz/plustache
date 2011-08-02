@@ -47,7 +47,7 @@ end
 # compiler/linker stuff
 CC = "g++"
 LD = "g++"
-CCFLAGS = ["-O3","-Wall", "-fPIC", "-I #{INCLUDE_DIRS.join(" -I ")}"]
+CCFLAGS = ["-c", "-O3","-Wall", "-fPIC", "-I #{INCLUDE_DIRS.join(" -I ")}"]
 
 
 # task definitions
@@ -56,11 +56,14 @@ task :default => "test:unit"
 namespace :test do
 
   CCFLAGS.delete "-O3"
-  CCFLAGS << "-O0"
   CCFLAGS << "-g"
   CCFLAGS << "--coverage"
+  CCFLAGS << "-O0"
   CCFLAGS << "-fprofile-arcs"
   CCFLAGS << "-ftest-coverage"
+  LDFLAGS << "-g"
+  LDFLAGS << "-O0"
+  LDFLAGS << "--coverage"
   LDFLAGS << "-fprofile-arcs"
 
   desc "task for compiling and executing unit tests"
@@ -151,7 +154,7 @@ directory OBJDIR
 (TEST_FILES+SRC_FILES+BIN_FILES).each do |srcfile|
   objfile = File.join(OBJDIR, File.basename(srcfile).ext('o'))
   file objfile => [srcfile, OBJDIR] do
-    sh "#{CC} #{CCFLAGS.join(" ")} -c #{srcfile} -o #{objfile}"
+    sh "#{CC} #{CCFLAGS.join(" ")} #{srcfile} -o #{objfile}"
   end
 end
 

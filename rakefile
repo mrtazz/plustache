@@ -10,7 +10,6 @@ PREFIX = "./"
 APPLICATION = "bin/plustache"
 TEST = "bin/plustache_tests"
 STATIC_LIB = "lib/libplustache.a"
-DYNAMIC_LIB = ""
 # directories
 BINDIR = "bin"
 OBJDIR = "build"
@@ -40,6 +39,8 @@ if res == "Darwin"
   DYNFLAGS = ["-dynamiclib"]
   DYNAMIC_LIB = "lib/libplustache.dylib"
 elsif res == "Linux"
+  DYNFLAGS = ["-shared", "-Wl,-soname,libplustache.so.0.2.1"]
+  DYNAMIC_LIB = "lib/libplustache.so.0.2.1"
   INCLUDE_DIRS.push("/usr/include")
   LDFLAGS.push("-L/usr/lib")
 end
@@ -116,7 +117,7 @@ directory BINDIR
 file TEST => BINDIR
 file TEST => SRC_OBJECTS + TEST_OBJECTS do |t|
   sh "#{LD} #{TEST_OBJECTS} #{SRC_OBJECTS} -o #{t.name} #{LDFLAGS.join(" ")} \
--lboost_regex -lgtest"
+-lboost_regex -lgtest -lpthread"
 end
 
 # rules for static library

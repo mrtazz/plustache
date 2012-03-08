@@ -1,0 +1,7 @@
+# command to install dependencies
+script: rake test:unit
+branches:
+  only:
+    - develop
+before_script:
+  - sudo apt-get install libgtest-dev libboost-regex-dev

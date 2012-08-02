@@ -9,18 +9,20 @@
 #include <iostream>
 #include "include/plustache_types.hpp"
 
-class Context {
-public:
-    Context ();
-    ~Context ();
-    int add(const std::string& key, const std::string& value);
-    int add(const std::string& key, PlustacheTypes::CollectionType& c);
-    int add(const std::string& key, const PlustacheTypes::ObjectType& o);
-    int add(const PlustacheTypes::ObjectType& o);
-    PlustacheTypes::CollectionType get(const std::string& key) const;
+namespace Plustache {
+	class Context {
+	public:
+	    Context ();
+	    ~Context ();
+	    int add(const std::string& key, const std::string& value);
+	    int add(const std::string& key, PlustacheTypes::CollectionType& c);
+	    int add(const std::string& key, const PlustacheTypes::ObjectType& o);
+	    int add(const PlustacheTypes::ObjectType& o);
+	    PlustacheTypes::CollectionType get(const std::string& key) const;
 
-private:
-    /* data */
-    std::map<std::string, PlustacheTypes::CollectionType> ctx;
-};
+	private:
+	    /* data */
+	    std::map<std::string, PlustacheTypes::CollectionType> ctx;
+	};
+} // namespace Plustache
 #endif

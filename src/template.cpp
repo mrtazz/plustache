@@ -13,6 +13,8 @@
 #include "include/plustache_types.hpp"
 #include "include/context.hpp"
 
+using namespace Plustache;
+
 /**
  * @brief constructor taking no arguments
  */

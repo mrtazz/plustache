@@ -7,6 +7,8 @@
 #include "include/context.hpp"
 #include "include/plustache_types.hpp"
 
+using namespace Plustache;
+
 Context::Context()
 {
 

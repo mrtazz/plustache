@@ -31,6 +31,7 @@ template_t::template_t()
 template_t::template_t(std::string& tmpl_path)
 {
     template_path = tmpl_path;
+    template_t::compile_data();
 }
 
 /**

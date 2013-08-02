@@ -38,7 +38,7 @@ class SimpleTest : public ::testing::Test
         myfile.close();
 
         ctx["title"] = "replaced";
-        template_t t;
+        Plustache::template_t t;
         result_string = t.render(template_string, ctx);
         result_file = t.render(file, ctx);
         result_notfound = t.render(notfound, ctx);

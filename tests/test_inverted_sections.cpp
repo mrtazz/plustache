@@ -51,7 +51,7 @@ class InvertedSectionsTest : public ::testing::Test
         ctx["showme"] = "true";
         ctx["stealth"] = "true";
         ctx["inverted"] = "false";
-        template_t t;
+        Plustache::template_t t;
         result_string = t.render(template_string, ctx);
         result_file = t.render(file, ctx);
     }

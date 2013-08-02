@@ -44,7 +44,7 @@ class SectionsTest : public ::testing::Test
         ctx["pet"] = "turtles";
         ctx["showme"] = "true";
         ctx["dontshowme"] = "false";
-        template_t t;
+        Plustache::template_t t;
         result_string = t.render(template_string, ctx);
         result_file = t.render(file, ctx);
     }

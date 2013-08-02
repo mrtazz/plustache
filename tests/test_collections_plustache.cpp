@@ -40,7 +40,7 @@ class CollectionsTest : public ::testing::Test
         PlustacheTypes::ObjectType tom;
         PlustacheTypes::ObjectType jerry;
         tom["name"] = "Tom";
-        Context ctx_single;
+        Plustache::Context ctx_single;
         ctx_single.add("me", "Daniel");
         ctx_single.add("people",tom);
 
@@ -49,7 +49,7 @@ class CollectionsTest : public ::testing::Test
         PlustacheTypes::CollectionType b_multiple;
         b_multiple.push_back(tom);
         b_multiple.push_back(jerry);
-        Context ctx_multiple;
+        Plustache::Context ctx_multiple;
         ctx_multiple.add("me", "Daniel");
         ctx_multiple.add("people", b_multiple);
 
@@ -58,14 +58,14 @@ class CollectionsTest : public ::testing::Test
         jerry["work"] = "Magic";
         PlustacheTypes::CollectionType b_multiple_fields;
         b_multiple_fields.push_back(tom);
-        Context ctx;
+        Plustache::Context ctx;
         ctx.add("me", "Daniel");
         ctx.add("people", b_multiple_fields);
         ctx.add("people", jerry);
 
 
 
-        template_t t;
+        Plustache::template_t t;
         result_single = t.render(template_single_string, ctx_single);
         result_multiple = t.render(template_single_string, ctx_multiple);
         result_multiple_fields = t.render(template_string, ctx);

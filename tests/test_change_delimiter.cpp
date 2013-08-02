@@ -41,9 +41,9 @@ class ChangeDelimiterTest : public ::testing::Test
 
         ctx["name"] = "Daniel";
         ctx["pet"] = "turtles";
-        template_t t;
+        Plustache::template_t t;
         result_string = t.render(template_string, ctx);
-        template_t t2;
+        Plustache::template_t t2;
         result_file = t2.render(file, ctx);
     }
 

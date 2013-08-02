@@ -50,7 +50,7 @@ class HtmlEscapeTest : public ::testing::Test
 
         ctx["title"] = "<pre>\"\\&foo\\</pre>";
         ctx["ritle"] = "<pre>\"\\\\&</pre>";
-        template_t t;
+        Plustache::template_t t;
         result_escaped_string = t.render(escaped_string, ctx);
         result_escaped_file = t.render(escaped_file, ctx);
         result_unescaped_string = t.render(unescaped_string, ctx);

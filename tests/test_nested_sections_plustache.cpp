@@ -44,7 +44,7 @@ class NestedSectionsTest : public ::testing::Test
         ctx["pet"] = "turtles";
         ctx["showme"] = "true";
         ctx["showme2"] = "true";
-        template_t t;
+        Plustache::template_t t;
         result_string = t.render(template_string, ctx);
         result_file = t.render(file, ctx);
     }

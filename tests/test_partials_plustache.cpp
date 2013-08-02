@@ -51,7 +51,7 @@ class PartialsTest : public ::testing::Test
         ctx["pet"] = "turtles";
         ctx["lpet"] = "Turtles";
 
-        template_t t;
+        Plustache::template_t t;
         result_string = t.render(template_string, ctx);
         result_file = t.render(file, ctx);
     }

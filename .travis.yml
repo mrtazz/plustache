@@ -1,7 +1,6 @@
-# command to install dependencies
-script: rake test:unit
-branches:
-  only:
-    - develop
+language: cpp
+script: autoreconf -i && ./configure && make check && ./test-program
 before_script:
-  - sudo apt-get install libgtest-dev libboost-regex-dev
+  - sudo apt-get install libgtest-dev libboost-regex-dev build-essential
+  - ./utils/build_gtest.sh
+

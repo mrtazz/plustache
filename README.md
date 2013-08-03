@@ -81,13 +81,12 @@ Clone this repository:
 
     git clone git://github.com/mrtazz/plustache.git
 
-Run the install task:
+Run the install tasks:
 
-    rake install prefix=installfolder
-
-This creates a dynamic library (OSX only at the moment) and
-copies the header files and library into $prefix/include and
-$prefix/lib respectively.
+    autoreconf -i
+    ./configure
+    make
+    make install
 
 Or you can get it via [homebrew](http://github.com/mxcl/homebrew):
 

@@ -101,6 +101,7 @@ Or you can get it via [homebrew](http://github.com/mxcl/homebrew):
 * Comments
 * Partials
 * Set Delimiter
+* HTML escape syntax (triple mustaches)
 
 ## TODO
 * plustache executable

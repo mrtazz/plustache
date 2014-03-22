@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- @file Directories.targets.example -->
+<!-- @brief Example MSBuild configuration for plustache. -->
+<!-- @author Joshua Napoli <jnapoli@alum.mit.edu> -->
+
+<!-- The plustache project files look for a "Directories.targets" file in any
+parent directory of the project. Rename this example file to set the parameters
+of the plustache build. -->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <!-- MSVC 11 (Visual Studio 2012) -->
+    <PlatformVersion>11</PlatformVersion>
+
+    <!-- The Root directory contains this repo and the Boost C++ Libraries. -->
+    <RootDirectory>$(MSBuildThisFileDirectory)/../..</RootDirectory>
+
+    <BoostDirectory>$(RootDirectory)/boost_1_55_0</BoostDirectory>
+    <BoostIncludeDirectory>$(BoostDirectory)</BoostIncludeDirectory>
+    <BoostLibraryDirectory>$(BoostDirectory)/lib64-msvc-$(PlatformVersion).0</BoostLibraryDirectory>
+
+    <PlustacheDirectory>$(BoostDirectory)/plustache</PlustacheDirectory>
+    <PlustacheIncludeDirectory>$(PlustacheDirectory)/include</PlustacheIncludeDirectory>
+
+    <PlatformToolset>v$(PlatformVersion)0</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseDebugLibraries Condition="'$(Configuration)'=='Debug'">true</UseDebugLibraries>
+    <UseDebugLibraries Condition="'$(Configuration)'=='Release'">false</UseDebugLibraries>
+    <WholeProgramOptimization Condition="'$(Configuration)'=='Debug'">false</WholeProgramOptimization>
+    <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+  </PropertyGroup>
+</Project>

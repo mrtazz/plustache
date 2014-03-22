@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- @file Default.targets -->
+<!-- @brief Guess default directories if explicit configuration is not given. -->
+<!-- @author Joshua Napoli <jnapoli@alum.mit.edu> -->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PlustacheDirectory Condition="'$(PlustacheDirectory)'==''">$(MSBuildThisFileDirectory)..</PlustacheDirectory>
+    <PlustacheIncludeDirectory Condition="'$(PlustacheIncludeDirectory)'==''">$(PlustacheDirectory)/include</PlustacheIncludeDirectory>
+
+    <PlustacheVendorDirectory Condition="'$(PlustacheVendorDirectory)'==''">$(PlustacheDirectory)/vendor</PlustacheVendorDirectory>
+
+    <!-- Use vendored gtest, unless otherwise configured. -->
+    <GTestDirectory Condition="'$(GTestDirectory)'==''">$(PlustacheVendorDirectory)/gtest-1.6.0</GTestDirectory>
+    <GTestIncludeDirectory Condition="'$(GTestIncludeDirectory)'==''">$(GTestDirectory)/include</GTestIncludeDirectory>
+
+    <PlatformToolset Condition="'$(PlatformToolset)'==''">v120</PlatformToolset>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(UseDebugLibraries)'==''">
+    <UseDebugLibraries Condition="'$(Configuration)'=='Debug'">true</UseDebugLibraries>
+    <UseDebugLibraries Condition="'$(Configuration)'=='Release'">false</UseDebugLibraries>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(WholeProgramOptimization)'==''">
+    <WholeProgramOptimization Condition="'$(Configuration)'=='Debug'">false</WholeProgramOptimization>
+    <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+  </PropertyGroup>
+
+  <!-- Find the "boost" directory in the parents of the PlustacheDirectory. -->
+  <Choose>
+    <When Condition="'$(BoostDirectory)'==''">
+      <PropertyGroup>
+        <BoostDirectory>$(PlustacheDirectory)/../boost</BoostDirectory>
+      </PropertyGroup>
+    </When>
+  </Choose>
+
+  <!-- Find the directory structure created by "b2 install". -->
+  <Choose>
+    <When Condition="Exists('$(BoostDirectory)/include/boost-1_55')">
+      <PropertyGroup>
+        <BoostIncludeDirectory Condition="'$(BoostIncludeDirectory)'==''">$(BoostDirectory)/include/boost-1_55</BoostIncludeDirectory>
+        <BoostLibraryDirectory Condition="'$(BoostLibraryDirectory)'==''">$(BoostDirectory)/lib</BoostLibraryDirectory>
+      </PropertyGroup>
+    </When>
+  </Choose>
+</Project>

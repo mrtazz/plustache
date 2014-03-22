@@ -38,3 +38,53 @@ usr
 
 # generated files
 include/plustache/version.h
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+*.cmake
+
+# GTest
+*.tlog
+
+# Microsoft Visual C incremental link database
+*.idb
+*.ilk
+
+# Microsoft Visual C object file
+*.obj
+
+# Microsoft Visual C program database
+*.pdb
+
+# Microsoft Visual Studio assembly cache
+*.cache
+
+# Microsoft Visual Studio build log
+*.log
+
+# Microsoft Visual Studio build state
+*.lastbuildstate
+
+# Microsoft Visual Studio code browsing database
+*.sdf
+
+# Microsoft Visual Studio manifest files
+*.manifest
+*_manifest.rc
+*.manifest.res
+
+# Microsoft Visual Studio user options
+*.suo
+
+# Microsoft Visual Studio temporary files
+*.opensdf
+
+# Microsot Windows executable
+*.exe
+
+# Microsoft Windows static library
+*.lib
+
+# Unit test sentinel
+*.passed

@@ -16,6 +16,14 @@ Create a template:
 
 Fill the context:
 
+    #include <string>
+    #include <plustache/plustache_types.hpp>
+    #include <plustache/template.hpp>
+
+    using std::string;
+    using PlustacheTypes::ObjectType;
+    using Plustache::template_t;
+
     ObjectType ctx;
     ctx["title"] = "About";
     ctx["name"] = "Daniel";
@@ -24,6 +32,8 @@ Fill the context:
 Instantiate template class and render the template:
 
     template_t t;
+    string template("<h1>{{title}}</h1>\nHi I am {{name}}.\nI like {{thing}}.");
+
     string result = t.render(template, ctx);
 
 Result:
@@ -92,6 +102,41 @@ Or you can get it via [homebrew](http://github.com/mxcl/homebrew):
 
     brew install plustache
 
+## Running the unit tests
+
+### Build the google test library:
+
+    cd vendor/gtest-1.6.0
+    ./configure
+    make
+
+On OS X, you may get an error:
+
+    vendor/gtest-1.6.0/include/gtest/internal/gtest-port.h:499:13: fatal error:
+    'tr1/tuple' file not found
+    #   include <tr1/tuple>  // NOLINT
+
+If so, re-run configure with the following argument
+
+    ./configure CPPFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1
+    make
+
+### Build the test program
+
+Run this from the top-level plustache source directory:
+
+    make test-program
+
+If you get the tr1/tuple error, do:
+
+    ./configure CPPFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1
+    make test-program
+
+### Run the test program
+
+    ./test-program
+
+
 ## Supported Functionality (as described in [the man page](http://mustache.github.com/mustache.5.html))
 * Variables
 * Sections
@@ -108,4 +153,4 @@ Or you can get it via [homebrew](http://github.com/mxcl/homebrew):
 
 ## Dependencies
 * boost for regex and some other things
-* google test for unit testing
+* google test for unit testing (included)

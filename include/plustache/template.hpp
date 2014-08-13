@@ -11,8 +11,8 @@
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/regex.hpp>
 
-#include "include/plustache_types.hpp"
-#include "include/context.hpp"
+#include <plustache/plustache_types.hpp>
+#include <plustache/context.hpp>
 
 namespace Plustache {
     class template_t {

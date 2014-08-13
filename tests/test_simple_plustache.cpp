@@ -4,7 +4,7 @@
 #include <fstream>
 #include <gtest/gtest.h>
 
-#include "include/template.hpp"
+#include <plustache/template.hpp>
 
 // The fixture for testing class Foo.
 class SimpleTest : public ::testing::Test

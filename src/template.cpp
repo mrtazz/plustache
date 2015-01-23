@@ -30,7 +30,7 @@ template_t::template_t()
  *
  * @param tmpl_path path to the template directory
  */
-template_t::template_t(std::string& tmpl_path)
+template_t::template_t(const std::string& tmpl_path)
 {
     template_path = tmpl_path;
     template_t::compile_data();

@@ -20,7 +20,7 @@ namespace Plustache {
       typedef PlustacheTypes::CollectionType CollectionType;
     public:
         template_t ();
-        template_t (std::string& tmpl_path);
+        template_t (const std::string& tmpl_path);
         ~template_t ();
         std::string render(const std::string& tmplate, const Context& ctx);
         std::string render(const std::string& tmplate, const ObjectType& ctx);

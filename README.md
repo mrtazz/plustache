@@ -1,3 +1,6 @@
+Fork of plustache to remove dependency on Boost.
+NOTE: Unit-tests are broken now
+
 # plustache - mustache templates for C++
 Basic port of [mustache templating](http://mustache.github.com) to C++.
 

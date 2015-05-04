@@ -7,13 +7,37 @@
 #include <plustache/template.hpp>
 
 #include <string>
-#include <boost/regex.hpp>
-#include <boost/algorithm/string/trim.hpp>
+#include <cctype>
+#include <algorithm>
+
+//#include <std/regex.hpp>
+//#include <std/algorithm/string/trim.hpp>
 
 #include <plustache/plustache_types.hpp>
 #include <plustache/context.hpp>
 
 using namespace Plustache;
+
+
+// trim from start
+static inline std::string &ltrim(std::string &s) 
+{
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
+    return s;
+}
+
+// trim from end
+static inline std::string &rtrim(std::string &s) 
+{
+    s.erase(std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+    return s;
+}
+
+// trim from both ends
+static inline std::string &trim(std::string &s) 
+{
+    return ltrim(rtrim(s));
+}
 
 /**
  * @brief constructor taking no arguments
@@ -80,23 +104,23 @@ std::string template_t::render_tags(const std::string& tmplate,
     std::string ret = "";
     std::string rest = "";
     std::string::const_iterator start, end;
-    boost::match_results<std::string::const_iterator> matches;
+    std::match_results<std::string::const_iterator> matches;
     start = tmplate.begin();
     end = tmplate.end();
     // return whole std::string when no tags are found
     if (!regex_search(start, end, matches, tag,
-                      boost::match_default | boost::format_all))
+                      std::regex_constants::match_default | std::regex_constants::format_default))
     {
         ret = tmplate;
     }
     // loop through tags and replace
     while (regex_search(start, end, matches, tag,
-                        boost::match_default | boost::format_all))
+                        std::regex_constants::match_default | std::regex_constants::format_default))
     {
         std::string modifier(matches[1].first, matches[1].second);
         std::string key(matches[2].first, matches[2].second);
-        boost::algorithm::trim(key);
-        boost::algorithm::trim(modifier);
+        trim(key);
+        trim(modifier);
         std::string text(start, matches[0].second);
         std::string repl;
         // don't html escape this
@@ -141,17 +165,17 @@ std::string template_t::render_tags(const std::string& tmplate,
 
         // replace
         ret += regex_replace(text, tag, repl,
-                             boost::match_default | boost::format_all);
+                             std::regex_constants::match_default | std::regex_constants::format_default);
         // change delimiter after was removed
         if (modifier == "=")
         {
           // regex for finding delimiters
-          boost::regex delim("(.+?) (.+?)=");
+          std::regex delim("(.+?) (.+?)=");
           // match object
-          boost::match_results<std::string::const_iterator> delim_m;
+          std::match_results<std::string::const_iterator> delim_m;
           // search for the delimiters
-          boost::regex_search(matches[2].first, matches[2].second, delim_m, delim,
-                              boost::match_default | boost::format_all);
+          std::regex_search(matches[2].first, matches[2].second, delim_m, delim,
+                              std::regex_constants::match_default | std::regex_constants::format_default);
           // set new otag and ctag
           std::string new_otag = delim_m[1];
           std::string new_ctag = delim_m[2];
@@ -182,26 +206,26 @@ std::string template_t::render_sections(const std::string& tmplate,
     std::string ret = "";
     std::string rest = "";
     std::string::const_iterator start, end;
-    boost::match_results<std::string::const_iterator> matches;
+    std::match_results<std::string::const_iterator> matches;
     start = tmplate.begin();
     end = tmplate.end();
     // return the whole template if no sections are found
-    if (!boost::regex_search(start, end, matches, section,
-                             boost::match_default | boost::format_all))
+    if (!std::regex_search(start, end, matches, section,
+                             std::regex_constants::match_default | std::regex_constants::format_default))
     {
         ret = tmplate;
     }
     // loop through sections and render
-    while (boost::regex_search(start, end, matches, section,
-                               boost::match_default | boost::format_all))
+    while (std::regex_search(start, end, matches, section,
+                               std::regex_constants::match_default | std::regex_constants::format_default))
     {
         // std::string assignments
         std::string text(start, matches[0].second);
         std::string key(matches[2].first, matches[2].second);
         std::string modifier(matches[1]);
         // trimming
-        boost::algorithm::trim(key);
-        boost::algorithm::trim(modifier);
+        trim(key);
+        trim(modifier);
         std::string repl = "";
         std::string show = "false";
         CollectionType values;
@@ -231,8 +255,8 @@ std::string template_t::render_sections(const std::string& tmplate,
         // assign replacement content
         if (show == "true")
         {
-            if (boost::regex_search(matches[3].first, matches[3].second, section,
-                                    boost::match_default | boost::format_all))
+            if (std::regex_search(matches[3].first, matches[3].second, section,
+                                    std::regex_constants::match_default | std::regex_constants::format_default))
             {
                 repl.assign(template_t::render_sections(matches[3], ctx));
             }
@@ -249,8 +273,8 @@ std::string template_t::render_sections(const std::string& tmplate,
             }
         }
         else repl.assign("");
-        ret += boost::regex_replace(text, section, repl,
-                                    boost::match_default | boost::format_all);
+        ret += std::regex_replace(text, section, repl,
+                                    std::regex_constants::match_default | std::regex_constants::format_default);
         rest.assign(matches[0].second, end);
         start = matches[0].second;
     }
@@ -316,26 +340,26 @@ std::string template_t::html_escape(const std::string& s)
     std::string ret = "";
     std::string rest = "";
     std::string::const_iterator start, end;
-    boost::match_results<std::string::const_iterator> matches;
+    std::match_results<std::string::const_iterator> matches;
     start = s.begin();
     end = s.end();
     // return original std::string if nothing is found
-    if (!boost::regex_search(start, end, matches, escape_chars,
-                             boost::match_default | boost::format_all))
+    if (!std::regex_search(start, end, matches, escape_chars,
+                             std::regex_constants::match_default | std::regex_constants::format_default))
     {
         ret = s;
     }
     // search for html chars
-    while (boost::regex_search(start, end, matches, escape_chars,
-                               boost::match_default | boost::format_all))
+    while (std::regex_search(start, end, matches, escape_chars,
+                               std::regex_constants::match_default | std::regex_constants::format_default))
     {
         std::string key(matches[0].first, matches[0].second);
         std::string text(start, matches[0].second);
-        boost::algorithm::trim(key);
+        trim(key);
         std::string repl;
         repl = escape_lut[key];
-        ret += boost::regex_replace(text, escape_chars, repl,
-                                    boost::match_default | boost::format_all);
+        ret += std::regex_replace(text, escape_chars, repl,
+                                    std::regex_constants::match_default | std::regex_constants::format_default);
         rest.assign(matches[0].second, end);
         start = matches[0].second;
     }

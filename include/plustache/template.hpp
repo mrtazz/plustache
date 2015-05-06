@@ -48,6 +48,7 @@ namespace Plustache {
                               const std::string& closetag);
         void compile_data();
         std::string get_template(const std::string& tmpl);
+        void update_tags();
     };
 } // namespace Plustache
 #endif

@@ -71,10 +71,16 @@ void template_t::compile_data()
     escape_lut[">"] = "&gt;";
     escape_lut["\\"] = "&#92;";
     escape_lut["\""] = "&quot;";
+    
     // regex for what to escape in a html std::string
     escape_chars.assign("(<|>|\"|\\\\|&)");
+    
+    // tag delimiters
     otag = "\\{\\{";
     ctag = "\\}\\}";
+    update_tags();
+}
+void template_t::update_tags() {
     // tag and section regex
     tag.assign(otag + "(#|=|&|!|>|\\{)?(.+?)(\\})?" + ctag);
     section.assign(otag + "(\\^|\\#)([^\\}]*)" + ctag +
@@ -417,10 +423,7 @@ void template_t::change_delimiter(const std::string& opentag,
 {
     otag = opentag;
     ctag = closetag;
-    // tag and section regex
-    template_t::tag.assign(otag + "(#|=|&|!|>|\\{)?(.+?)(\\})?" + ctag);
-    template_t::section.assign(otag + "(\\^|\\#)([^\\}]*)" + ctag +
-                               "\\s*(.+?)\\s*" + otag + "/\\2"+ctag);
+    update_tags();
 }
 
 /**

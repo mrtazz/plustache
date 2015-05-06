@@ -102,14 +102,6 @@ TEST_F(CollectionsTest, TestCollectionMultipleWithMultipleFields)
 }
 TEST_F(CollectionsTest, TestCollectionMultiLine)
 {
-    std::string template_string =
-        "Hi I am {{me}}.\n"
-        "{{#people}}\n"
-        "Hi {{me}}, I am {{name}}, I do {{work}}.\n"
-        "{{/people}}\n"
-        "\n"
-        "Farewell!\n";
-
     Plustache::Context ctx;
     ctx.add("me", "Daniel");
     
@@ -123,15 +115,27 @@ TEST_F(CollectionsTest, TestCollectionMultiLine)
     jerry["work"] = "Magic";
     ctx.add("people", jerry);
 
+    std::string tmplate =
+R"---tmplate---(
+Hi! I am {{me}}.
+{{#people}}
+Hello, {{me}}; I am {{name}}, and I do {{work}}.
+{{/people}}
+
+*crickets*
+)---tmplate---";
+
     std::string expected =
-        "Hi I am Daniel.\n"
-        "Hi Daniel, I am Tom, I do Accounting.\n"
-        "Hi Daniel, I am Jerry, I do Magic.\n"
-        "\n"
-        "Farewell!\n";
-    
+R"---expected---(
+Hi! I am Daniel.
+Hello, Daniel; I am Tom, and I do Accounting.
+Hello, Daniel; I am Jerry, and I do Magic.
+
+*crickets*
+)---expected---";
+
     Plustache::template_t t;
-    std::string actual = t.render(template_string, ctx);
+    std::string actual = t.render(tmplate, ctx);
     
     EXPECT_EQ(expected, actual);
 }

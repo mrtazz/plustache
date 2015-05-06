@@ -8,8 +8,6 @@
 #include <iostream>
 #include <fstream>
 #include <streambuf>
-//#include <boost/algorithm/string/trim.hpp>
-//#include <boost/regex.hpp>
 #include <regex>
 
 #include <plustache/plustache_types.hpp>

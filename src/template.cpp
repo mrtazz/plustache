@@ -10,9 +10,6 @@
 #include <cctype>
 #include <algorithm>
 
-//#include <std/regex.hpp>
-//#include <std/algorithm/string/trim.hpp>
-
 #include <plustache/plustache_types.hpp>
 #include <plustache/context.hpp>
 

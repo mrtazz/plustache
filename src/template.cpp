@@ -286,17 +286,18 @@ std::string template_t::render_sections(const std::string& tmplate,
         
         // Replace matched section with generated text
         ret += std::regex_replace(text, section, repl, std::regex_constants::match_default | std::regex_constants::format_default);
+        
+        // Check on end-of-section newlines
+        bool shouldSwallowNextNewline =
+            // If the section ended in a newline, or was empty, it's swallowable...
+            ((repl[repl.length() - 1] == '\n') || show == "false") &&
+            // ...if that's the case, and the section is followed by a newline, swallow it.
+            (std::string(matches[0].second, matches[0].second + 1) == "\n");
+        
         // Store the rest of the template for the next pass
-        rest.assign(matches[0].second, end);
-        // Set the next starting point at the end of the current section
-        start = matches[0].second;
-    }
-    
-    // Collapse end-of-section newlines
-    if (rest.length() && ret.length() &&
-      rest[0] == '\n' &&
-      rest[0] == ret[ret.length() - 1])  {
-        ret = ret.substr(0, ret.length() - 1);
+        auto next = matches[0].second + (shouldSwallowNextNewline ? 1 : 0);
+        rest.assign(next, end);
+        start = next;
     }
     
     // append and return

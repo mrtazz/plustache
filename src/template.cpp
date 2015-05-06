@@ -143,7 +143,7 @@ std::string template_t::render_tags(const std::string& tmplate,
                 size_t found = s.find(f);
                 while(found != std::string::npos)
                 {
-                    s.replace(found,f.length(),"\\\\");
+                    s.replace(found,f.length(),"\\");
                     found = s.find(f, found+2);
                 }
                 repl.assign(s);

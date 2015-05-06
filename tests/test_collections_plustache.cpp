@@ -100,3 +100,33 @@ TEST_F(CollectionsTest, TestCollectionMultipleWithMultipleFields)
         expected += "Hi Daniel, I am Jerry, I do Magic.";
     EXPECT_EQ(expected, result_multiple_fields);
 }
+TEST_F(CollectionsTest, TestCollectionMultiLine)
+{
+    std::string template_string =
+        "Hi I am {{me}}.\n"
+        "{{#people}}\n"
+        "Hi {{me}}, I am {{name}}, I do {{work}}.\n"
+        "{{/people}}";
+
+    Plustache::Context ctx;
+    ctx.add("me", "Daniel");
+    
+    PlustacheTypes::ObjectType tom;
+    tom["name"] = "Tom";
+    tom["work"] = "Accounting";
+    ctx.add("people", tom);
+    
+    PlustacheTypes::ObjectType jerry;
+    jerry["name"] = "Jerry";
+    jerry["work"] = "Magic";
+    ctx.add("people", jerry);
+
+    std::string expected = "Hi I am Daniel.\n";
+        expected += "Hi Daniel, I am Tom, I do Accounting.\n";
+        expected += "Hi Daniel, I am Jerry, I do Magic.\n";
+    
+    Plustache::template_t t;
+    std::string actual = t.render(template_string, ctx);
+    
+    EXPECT_EQ(expected, actual);
+}

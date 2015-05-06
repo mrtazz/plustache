@@ -77,8 +77,10 @@ void template_t::compile_data()
     ctag = "\\}\\}";
     // tag and section regex
     tag.assign(otag + "(#|=|&|!|>|\\{)?(.+?)(\\})?" + ctag);
-    section.assign(otag + "(\\^|\\#)([^\\}]*)" + ctag + "\\s*(.+?)\\s*"
-                   + otag + "/\\2"+ctag);
+    section.assign(otag + "(\\^|\\#)([^\\}]*)" + ctag +
+        "(?:[ \\t]*\\n)?" +  // ignore leading whitespace
+        "((?:.|\\s)+?)" +  // section content
+        otag + "\\/\\2" + ctag);
 }
 
 /**

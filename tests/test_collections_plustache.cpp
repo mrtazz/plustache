@@ -106,7 +106,9 @@ TEST_F(CollectionsTest, TestCollectionMultiLine)
         "Hi I am {{me}}.\n"
         "{{#people}}\n"
         "Hi {{me}}, I am {{name}}, I do {{work}}.\n"
-        "{{/people}}";
+        "{{/people}}\n"
+        "\n"
+        "Farewell!\n";
 
     Plustache::Context ctx;
     ctx.add("me", "Daniel");
@@ -121,9 +123,12 @@ TEST_F(CollectionsTest, TestCollectionMultiLine)
     jerry["work"] = "Magic";
     ctx.add("people", jerry);
 
-    std::string expected = "Hi I am Daniel.\n";
-        expected += "Hi Daniel, I am Tom, I do Accounting.\n";
-        expected += "Hi Daniel, I am Jerry, I do Magic.\n";
+    std::string expected =
+        "Hi I am Daniel.\n"
+        "Hi Daniel, I am Tom, I do Accounting.\n"
+        "Hi Daniel, I am Jerry, I do Magic.\n"
+        "\n"
+        "Farewell!\n";
     
     Plustache::template_t t;
     std::string actual = t.render(template_string, ctx);

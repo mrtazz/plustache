@@ -283,8 +283,17 @@ std::string template_t::render_sections(const std::string& tmplate,
         rest.assign(matches[0].second, end);
         start = matches[0].second;
     }
+    
+    // Collapse end-of-section newlines
+    if (rest.length() && ret.length() &&
+      rest[0] == '\n' &&
+      rest[0] == ret[ret.length() - 1])  {
+        ret = ret.substr(0, ret.length() - 1);
+    }
+    
     // append and return
     ret += rest;
+    
     return ret;
 }
 

@@ -228,6 +228,7 @@ std::string template_t::render_sections(const std::string& tmplate,
         std::string text(start, matches[0].second);
         std::string key(matches[2].first, matches[2].second);
         std::string modifier(matches[1]);
+        
         // trimming
         trim(key);
         trim(modifier);
@@ -235,6 +236,7 @@ std::string template_t::render_sections(const std::string& tmplate,
         std::string show = "false";
         CollectionType values;
         values = ctx.get(key);
+        
         if (values.size() == 1)
         {
             // if we don't have a collection, we find the key and an
@@ -254,33 +256,39 @@ std::string template_t::render_sections(const std::string& tmplate,
         {
             show = "true";
         }
+        
         // inverted section?
         if (modifier == "^" && show == "false") show = "true";
         else if (modifier == "^" && show == "true") show = "false";
-        // assign replacement content
+        
+        // Generate content
         if (show == "true")
         {
-            if (std::regex_search(matches[3].first, matches[3].second, section,
-                                    std::regex_constants::match_default | std::regex_constants::format_default))
+            for(CollectionType::iterator it = values.begin();
+                it != values.end(); ++it)
             {
-                repl.assign(template_t::render_sections(matches[3], ctx));
-            }
-            else
-            {
-                for(CollectionType::iterator it = values.begin();
-                    it != values.end(); ++it)
+                std::string content = matches[3];
+                Context small_ctx;
+                small_ctx = ctx;
+                small_ctx.add(*it);
+                
+                if (std::regex_search(content, section,
+                                        std::regex_constants::match_default | std::regex_constants::format_default))
                 {
-                  Context small_ctx;
-                  small_ctx = ctx;
-                  small_ctx.add(*it);
-                  repl += template_t::render_tags(matches[3], small_ctx);
+                    content.assign(template_t::render_sections(content, small_ctx));
                 }
+                
+                repl += template_t::render_tags(content, small_ctx);
             }
         }
+        // Hide section with empty content
         else repl.assign("");
-        ret += std::regex_replace(text, section, repl,
-                                    std::regex_constants::match_default | std::regex_constants::format_default);
+        
+        // Replace matched section with generated text
+        ret += std::regex_replace(text, section, repl, std::regex_constants::match_default | std::regex_constants::format_default);
+        // Store the rest of the template for the next pass
         rest.assign(matches[0].second, end);
+        // Set the next starting point at the end of the current section
         start = matches[0].second;
     }
     

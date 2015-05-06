@@ -139,3 +139,49 @@ Hello, Daniel; I am Jerry, and I do Magic.
     
     EXPECT_EQ(expected, actual);
 }
+
+TEST_F(CollectionsTest, TestCollectionMultiLineConditionals)
+{
+    Plustache::Context ctx;
+    ctx.add("me", "Daniel");
+    
+    PlustacheTypes::ObjectType tom;
+    tom["name"] = "Tom";
+    tom["work"] = "Accounting";
+    tom["surprise"] = "false";
+    ctx.add("people", tom);
+    
+    PlustacheTypes::ObjectType jerry;
+    jerry["name"] = "Jerry";
+    jerry["work"] = "Magic";
+    jerry["surprise"] = "true";
+    ctx.add("people", jerry);
+
+    std::string tmplate =
+R"---tmplate---(
+Hi! I am {{me}}.
+{{#people}}
+Hello, {{me}}; I am {{name}}, and I do {{work}}.
+{{#surprise}}
+*{{name}} disappears in a flash of light and smoke*
+{{/surprise}}
+{{/people}}
+
+*crickets*
+)---tmplate---";
+
+    std::string expected =
+R"---expected---(
+Hi! I am Daniel.
+Hello, Daniel; I am Tom, and I do Accounting.
+Hello, Daniel; I am Jerry, and I do Magic.
+*Jerry disappears in a flash of light and smoke*
+
+*crickets*
+)---expected---";
+
+    Plustache::template_t t;
+    std::string actual = t.render(tmplate, ctx);
+    
+    EXPECT_EQ(expected, actual);
+}

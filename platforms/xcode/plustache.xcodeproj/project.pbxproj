@@ -33,12 +33,12 @@
 		2F9709241AF9A73E00D82006 /* test_partials_plustache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2F9708F61AF9993B00D82006 /* test_partials_plustache.cpp */; };
 		2F9709251AF9A73E00D82006 /* test_sections_plustache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2F9708F71AF9993B00D82006 /* test_sections_plustache.cpp */; };
 		2F9709261AF9A73E00D82006 /* test_simple_plustache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2F9708F81AF9993B00D82006 /* test_simple_plustache.cpp */; };
-		2F9709281AF9A75300D82006 /* context.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2F9708FB1AF999B700D82006 /* context.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		2F9709291AF9A75300D82006 /* plustache_types.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2F9708FC1AF999B700D82006 /* plustache_types.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		2F97092A1AF9A75300D82006 /* template.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2F9708FD1AF999B700D82006 /* template.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F9709381AF9A8C700D82006 /* gtest-all.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2F9709331AF9A86D00D82006 /* gtest-all.cc */; };
 		2F97093B1AF9A8D600D82006 /* libgtest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F97092F1AF9A7F200D82006 /* libgtest.a */; };
 		2F97093C1AF9AAC100D82006 /* GoogleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2F9709011AF9A63800D82006 /* GoogleTests.mm */; };
+		2FEF3FFC1B21EC3F00A1FFD7 /* context.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2F9708FB1AF999B700D82006 /* context.hpp */; };
+		2FEF3FFD1B21EC3F00A1FFD7 /* plustache_types.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2F9708FC1AF999B700D82006 /* plustache_types.hpp */; };
+		2FEF3FFE1B21EC3F00A1FFD7 /* template.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2F9708FD1AF999B700D82006 /* template.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +57,21 @@
 			remoteInfo = gtest;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2FEF3FFB1B21EC3800A1FFD7 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				2FEF3FFC1B21EC3F00A1FFD7 /* context.hpp in CopyFiles */,
+				2FEF3FFD1B21EC3F00A1FFD7 /* plustache_types.hpp in CopyFiles */,
+				2FEF3FFE1B21EC3F00A1FFD7 /* template.hpp in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2F9708ED1AF9992D00D82006 /* context.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = context.cpp; sourceTree = "<group>"; };
@@ -196,16 +211,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		2F9709041AF9A6A900D82006 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2F97092A1AF9A75300D82006 /* template.hpp in Headers */,
-				2F9709291AF9A75300D82006 /* plustache_types.hpp in Headers */,
-				2F9709281AF9A75300D82006 /* context.hpp in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2F97092D1AF9A7F200D82006 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -220,9 +225,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2F9709081AF9A6A900D82006 /* Build configuration list for PBXNativeTarget "plustache" */;
 			buildPhases = (
+				2FEF3FFB1B21EC3800A1FFD7 /* CopyFiles */,
 				2F9709021AF9A6A900D82006 /* Sources */,
 				2F9709031AF9A6A900D82006 /* Frameworks */,
-				2F9709041AF9A6A900D82006 /* Headers */,
 			);
 			buildRules = (
 			);

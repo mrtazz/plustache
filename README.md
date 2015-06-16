@@ -10,81 +10,94 @@ And I am still trying hard to keep it simple.
 ### Simple Usage
 Create a template:
 
-    <h1>{{title}}</h1>
-    Hi I am {{name}}.
-    I like {{thing}}.
+```html
+<h1>{{title}}</h1>
+Hi I am {{name}}.
+I like {{thing}}.
+```
 
 Fill the context:
 
-    #include <string>
-    #include <plustache/plustache_types.hpp>
-    #include <plustache/template.hpp>
+```C++
+#include <string>
+#include <plustache/plustache_types.hpp>
+#include <plustache/template.hpp>
 
-    using std::string;
-    using PlustacheTypes::ObjectType;
-    using Plustache::template_t;
+using std::string;
+using PlustacheTypes::ObjectType;
+using Plustache::template_t;
 
-    ObjectType ctx;
-    ctx["title"] = "About";
-    ctx["name"] = "Daniel";
-    ctx["thing"] = "turtles";
+ObjectType ctx;
+ctx["title"] = "About";
+ctx["name"] = "Daniel";
+ctx["thing"] = "turtles";
+```
 
 Instantiate template class and render the template:
 
-    template_t t;
-    string template("<h1>{{title}}</h1>\nHi I am {{name}}.\nI like {{thing}}.");
+```C++
+template_t t;
+string template("<h1>{{title}}</h1>\nHi I am {{name}}.\nI like {{thing}}.");
 
-    string result = t.render(template, ctx);
+string result = t.render(template, ctx);
+```
 
 Result:
 
-    <h1>About</h1>
-    Hi I am Daniel.
-    I like turtles.
+```html
+<h1>About</h1>
+Hi I am Daniel.
+I like turtles.
+```
 
 ### Advanced Usage
 Create the template:
 
-    <h1> {{title}} </h1>
-    <ul>
-      {{# friends}}
-        <li> {{name}}</li>
-        <li> {{job}}</li>
-        <li> {{status}}</li>
-      {{/ friends}}
-    </ul>
+```html
+<h1> {{title}} </h1>
+<ul>
+    {{# friends}}
+      <li> {{name}}</li>
+      <li> {{job}}</li>
+      <li> {{status}}</li>
+    {{/ friends}}
+</ul>
+```
 
 Create the context:
 
-    // create types
-    context ctx;
-    CollectionType c;
-    ObjectType jim;
-    ObjectType john;
-    ObjectType jack;
-    // Fill values
-    ctx.add("title", "My friends");
-    jim["name"] = "Jim";
-    jim["job"] = "Wizard";
-    jim["status"] = "Eating";
-    john["name"] = "John";
-    john["job"] = "Rainbow Painter";
-    john["status"] = "Sleeping";
-    jack["name"] = "Jack";
-    jack["job"] = "Unicorn Trainer";
-    jack["status"] = "Riding";
-    // enter data
-    c.push_back(jim);
-    c.push_back(john);
-    ctx.add("friends", c);
-    // also possible
-    ctx.add("friends", jack);
+```C++
+// create types
+context ctx;
+CollectionType c;
+ObjectType jim;
+ObjectType john;
+ObjectType jack;
+// Fill values
+ctx.add("title", "My friends");
+jim["name"] = "Jim";
+jim["job"] = "Wizard";
+jim["status"] = "Eating";
+john["name"] = "John";
+john["job"] = "Rainbow Painter";
+john["status"] = "Sleeping";
+jack["name"] = "Jack";
+jack["job"] = "Unicorn Trainer";
+jack["status"] = "Riding";
+// enter data
+c.push_back(jim);
+c.push_back(john);
+ctx.add("friends", c);
+// also possible
+ctx.add("friends", jack);
+```
 
 Render the template:
 
-    template_t t;
-    string result = t.render(template, ctx);
-
+```C++
+template_t t;
+string result = t.render(template, ctx);
+```
 
 ## Installation
 Clone this repository:

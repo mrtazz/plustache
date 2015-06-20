@@ -1,6 +1,36 @@
+sudo: false
 language: cpp
-script: autoreconf -i && ./configure && make check && ./test-program
+compiler:
+  - gcc
+  - clang
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-4.9
+      - g++-4.9
+      - clang
+before_install:
+  - if [ "$CXX" = "g++" ]; then 
+      export CXX="g++-4.9" CC="gcc-4.9";
+      export CXXFLAGS="-std=c++11";
+    elif [ "$CXX" = "clang++" ]; then
+      export CXXFLAGS="-std=c++11 -stdlib=libc++ -DGTEST_USE_OWN_TR1_TUPLE=1";
+    fi
+install:
+  - if [ "$CXX" == "clang++" ]; then
+      svn co --quiet http://llvm.org/svn/llvm-project/libcxx/trunk libcxx;
+      cd libcxx/lib && bash buildit;
+      ln -sf libc++.so.1.0 libc++.so.1;
+      cd "$TRAVIS_BUILD_DIR";
+      export CXXFLAGS="$CXXFLAGS -L`pwd`/libcxx/lib -I`pwd`/libcxx/include";
+      export LD_LIBRARY_PATH="`pwd`/libcxx/lib:$LD_LIBRARY_PATH";
+    fi
 before_script:
-  - sudo apt-get install libgtest-dev libboost-regex-dev build-essential
   - ./utils/build_gtest.sh
+  - autoreconf -i && ./configure && make check
+script: ./test-program
+notifications:
+  email: false
 

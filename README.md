@@ -1,8 +1,6 @@
 # plustache - mustache templates for C++
 Basic port of [mustache templating](http://mustache.github.com) to C++.
 
-This is a fork of plustache to remove the dependency on Boost. Also adds an Xcode project with library and test targets, and fixes some bugs.
-
 ## Motivation
 I just wanted to port mustache and build simple templating for C++.
 And I am still trying hard to keep it simple.
@@ -154,4 +152,5 @@ If you get the tr1/tuple error, do:
 * plustache executable
 
 ## Dependencies
+* compiler support for C++11's regex implementation (Clang or GCC 4.9+)
 * google test for unit testing (included)

@@ -190,6 +190,9 @@ std::string template_t::render_tags(const std::string& tmplate,
         // set start for next tag and rest of std::string
         rest.assign(matches[0].second, end);
         start = matches[0].second;
+        
+        // Reset for next round (required for libstdc++ implementation)
+        matches = std::match_results<std::string::const_iterator>();
     }
     // append and return
     ret += rest;

@@ -295,7 +295,9 @@ std::string template_t::render_sections(const std::string& tmplate,
             }
         }
         // Hide section with empty content
-        else repl.assign("");
+        else {
+            repl.assign("");
+        }
         
         // Replace matched section with generated text
         ret += std::regex_replace(text, section, repl,

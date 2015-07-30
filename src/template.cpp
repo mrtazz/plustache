@@ -303,14 +303,14 @@ std::string template_t::render_sections(const std::string& tmplate,
             std::regex_constants::format_default);
         
         // Check on end-of-section newlines
-        bool shouldSwallowNextNewline =
-            // If the section ended in a newline, or was empty, it's swallowable...
+        bool shouldSkipNextNewline =
+            // If the section ended in a newline, or was empty...
             ((repl[repl.length() - 1] == '\n') || show == "false") &&
-            // ...if that's the case, and the section is followed by a newline, swallow it.
+            // ...and the section is also followed by a newline, skip it.
             (std::string(matches[0].second, matches[0].second + 1) == "\n");
         
         // Store the rest of the template for the next pass
-        auto next = matches[0].second + (shouldSwallowNextNewline ? 1 : 0);
+        auto next = matches[0].second + (shouldSkipNextNewline ? 1 : 0);
         rest.assign(next, end);
         start = next;
     }

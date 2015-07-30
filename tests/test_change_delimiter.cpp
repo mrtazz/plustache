@@ -41,10 +41,6 @@ class ChangeDelimiterTest : public ::testing::Test
 
         ctx["name"] = "Daniel";
         ctx["pet"] = "turtles";
-        Plustache::template_t t;
-        result_string = t.render(template_string, ctx);
-        Plustache::template_t t2;
-        result_file = t2.render(file, ctx);
     }
 
     virtual void TearDown()
@@ -57,6 +53,8 @@ class ChangeDelimiterTest : public ::testing::Test
 // Tests that a simple mustache tag is replaced
 TEST_F(ChangeDelimiterTest, TestChangeDelimiterFromString)
 {
+    Plustache::template_t t;
+    result_string = t.render(template_string, ctx);
     std::string expected = "Hi I am Daniel.\n";
            expected += "I like turtles.";
     EXPECT_EQ(expected, result_string);
@@ -64,6 +62,8 @@ TEST_F(ChangeDelimiterTest, TestChangeDelimiterFromString)
 
 TEST_F(ChangeDelimiterTest, TestChangeDelimiterFromFile)
 {
+    Plustache::template_t t2;
+    result_file = t2.render(file, ctx);
     std::string expected = "Hi I am Daniel.\n";
            expected += "I like turtles.";
     EXPECT_EQ(expected, result_file);

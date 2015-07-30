@@ -8,8 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <streambuf>
-#include <boost/algorithm/string/trim.hpp>
-#include <boost/regex.hpp>
+#include <regex>
 
 #include <plustache/plustache_types.hpp>
 #include <plustache/context.hpp>
@@ -31,9 +30,9 @@ namespace Plustache {
         std::string otag;
         std::string ctag;
         /* regex */
-        boost::regex tag;
-        boost::regex section;
-        boost::regex escape_chars;
+        std::regex tag;
+        std::regex section;
+        std::regex escape_chars;
         /* lut for HTML escape chars */
         std::map<std::string, std::string> escape_lut;
         /* render and helper methods */
@@ -47,6 +46,7 @@ namespace Plustache {
                               const std::string& closetag);
         void compile_data();
         std::string get_template(const std::string& tmpl);
+        void update_tags();
     };
 } // namespace Plustache
 #endif

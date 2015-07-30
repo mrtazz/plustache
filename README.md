@@ -165,5 +165,5 @@ If you get the tr1/tuple error, do:
 * plustache executable
 
 ## Dependencies
-* boost for regex and some other things
+* compiler support for C++11's regex implementation (Clang or GCC 4.9+)
 * google test for unit testing (included)

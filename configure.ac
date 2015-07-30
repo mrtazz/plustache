@@ -13,7 +13,6 @@ AC_PROG_CC
 AC_PROG_INSTALL
 
 # Checks for libraries.
-AC_CHECK_LIB([boost_regex], [main])
 AC_CHECK_LIB([gtest], [main])
 
 # Checks for header files.

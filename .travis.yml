@@ -31,6 +31,3 @@ before_script:
   - ./utils/build_gtest.sh
   - autoreconf -i && ./configure && make check
 script: ./test-program
-notifications:
-  email: false
-

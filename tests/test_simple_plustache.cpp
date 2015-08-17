@@ -15,6 +15,8 @@ class SimpleTest : public ::testing::Test
     std::string template_string;
     std::string result_notfound;
     std::string notfound;
+    std::string result_dollars;
+    std::string dollars;
     std::map<std::string, std::string> ctx;
     std::string file;
 
@@ -30,6 +32,7 @@ class SimpleTest : public ::testing::Test
     {
         template_string = "text {{title}} text";
         notfound = "text {{fitle}} text";
+        dollars = "text {{dollars}}";
         file = "multiple.mustache";
 
         std::ofstream myfile;
@@ -38,10 +41,13 @@ class SimpleTest : public ::testing::Test
         myfile.close();
 
         ctx["title"] = "replaced";
+        ctx["dollars"] = "$0";
+
         Plustache::template_t t;
         result_string = t.render(template_string, ctx);
         result_file = t.render(file, ctx);
         result_notfound = t.render(notfound, ctx);
+        result_dollars = t.render(dollars, ctx);
     }
 
     virtual void TearDown()
@@ -67,4 +73,10 @@ TEST_F(SimpleTest, TestSimpleNotFoundMustacheFromString)
 {
     const std::string expected = "text  text";
     EXPECT_EQ(expected, result_notfound);
+}
+
+TEST_F(SimpleTest, TestDollarSignsInValue)
+{
+    const std::string expected = "text $0";
+    EXPECT_EQ(expected, result_dollars);
 }

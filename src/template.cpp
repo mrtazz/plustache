@@ -104,17 +104,7 @@ std::string template_t::render_tags(const std::string& tmplate,
         {
             try
             {
-                // get value
-                std::string s = ctx.get(key)[0][key];
-                // escape backslash in std::string
-                const std::string f = "\\";
-                size_t found = s.find(f);
-                while(found != std::string::npos)
-                {
-                    s.replace(found,f.length(),"\\\\");
-                    found = s.find(f, found+2);
-                }
-                repl.assign(s);
+                repl.assign(ctx.get(key)[0][key]);
             }
             catch(int i) { repl.assign(""); }
         }
@@ -140,8 +130,8 @@ std::string template_t::render_tags(const std::string& tmplate,
         }
 
         // replace
-        ret += regex_replace(text, tag, repl,
-                             boost::match_default | boost::format_all);
+        ret += boost::regex_replace(text, tag, repl,
+                             boost::match_default | boost::format_all | boost::regex_constants::format_literal);
         // change delimiter after was removed
         if (modifier == "=")
         {
@@ -250,7 +240,7 @@ std::string template_t::render_sections(const std::string& tmplate,
         }
         else repl.assign("");
         ret += boost::regex_replace(text, section, repl,
-                                    boost::match_default | boost::format_all);
+                                    boost::match_default | boost::format_all | boost::regex_constants::format_literal);
         rest.assign(matches[0].second, end);
         start = matches[0].second;
     }
@@ -335,7 +325,7 @@ std::string template_t::html_escape(const std::string& s)
         std::string repl;
         repl = escape_lut[key];
         ret += boost::regex_replace(text, escape_chars, repl,
-                                    boost::match_default | boost::format_all);
+                                    boost::match_default | boost::format_all | boost::regex_constants::format_literal);
         rest.assign(matches[0].second, end);
         start = matches[0].second;
     }

@@ -10,3 +10,19 @@ test_program_LDADD = .libs/libplustache.a
 
 lib_LTLIBRARIES=libplustache.la
 libplustache_la_SOURCES=src/template.cpp src/context.cpp
+
+
+.PHONY: test check clean-coverage-files coverage-html
+
+test: check
+	./test-program
+
+clean-local:
+	find . -name "*.gcda" -print0 | xargs -0 rm
+
+coverage.info: test
+	./utils/lcov-1.11/bin/lcov --compat-libtool --capture --directory src --output-file coverage.info
+	./utils/lcov-1.11/bin/lcov --compat-libtool --remove coverage.info "/usr*" -o coverage.info
+
+coverage-html: coverage.info
+	./utils/lcov-1.11/bin/genhtml -t "plustache coverage report" --legend --show-details coverage.info --output-directory html

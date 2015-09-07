@@ -1,6 +1,14 @@
 language: cpp
-script: autoreconf -i && ./configure && make check && ./test-program
+script: autoreconf -i && ./configure --enable-coverage && make test
 before_script:
-  - sudo apt-get install libgtest-dev libboost-regex-dev build-essential
   - ./utils/build_gtest.sh
-
+  - gem install coveralls-lcov
+after_success:
+  - make coverage.info
+  - coveralls-lcov coverage.info
+sudo: false
+addons:
+  apt:
+    packages:
+    - build-essential
+    - libboost-regex-dev

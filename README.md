@@ -1,4 +1,4 @@
-# plustache - mustache templates for C++
+# plustache - mustache templates for C++ [![Build Status](https://travis-ci.org/mrtazz/plustache.svg?branch=master)](https://travis-ci.org/mrtazz/plustache)[![Coverage Status](https://coveralls.io/repos/mrtazz/plustache/badge.svg?branch=master&service=github)](https://coveralls.io/github/mrtazz/plustache?branch=master)
 Basic port of [mustache templating](http://mustache.github.com) to C++.
 
 ## Motivation

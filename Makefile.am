@@ -21,8 +21,8 @@ clean-local:
 	find . -name "*.gcda" -print0 | xargs -0 rm
 
 coverage.info: test
-	./utils/lcov-1.11/bin/lcov --compat-libtool --capture --directory src --output-file coverage.info
-	./utils/lcov-1.11/bin/lcov --compat-libtool --remove coverage.info "/usr*" -o coverage.info
+	lcov --compat-libtool --capture --directory src --output-file coverage.info
+	lcov --compat-libtool --remove coverage.info "/usr*" -o coverage.info
 
 coverage-html: coverage.info
-	./utils/lcov-1.11/bin/genhtml -t "plustache coverage report" --legend --show-details coverage.info --output-directory html
+	genhtml -t "plustache coverage report" --legend --show-details coverage.info --output-directory html

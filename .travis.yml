@@ -4,6 +4,8 @@ before_script:
   - ./utils/build_gtest.sh
   - gem install coveralls-lcov
 after_success:
+  - curl http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz | tar xz
+  - export PATH=$PATH:`pwd`/lcov-1.11/bin
   - make coverage.info
   - coveralls-lcov coverage.info
 sudo: false

@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.4.0 (??/??/2016)
+- Add MSVC build. (Joshua Napoli)
+- fix bug with special characters in replacement text (John Chesley)
+- add automated package builds via travis ci (Daniel Schauenberg)
+- add coveralls support to travis build and switch to container infra (Daniel Schauenberg)
+- add build setup for coverage reporting (Daniel Schauenberg)
+- upgrade gtest to 1.7 and add lcov util (Daniel Schauenberg)
+- Update README.md with GitHub aware Syntax coloring (Grant McGovern)
+- Accept const string ref in template constructor (Maarten de Vries)
+- Move header files to their own directory (Lorin Hochstein)
+
 ## v0.3.0 (01/29/2014)
 * mention support of HTML escaping in README
 * no more rakefile

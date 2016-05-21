@@ -106,19 +106,21 @@ string result = t.render(template, ctx);
 ```
 
 ## Installation
-Clone this repository:
+There are packages available for some Linux distributions on
+[Packagecloud](https://packagecloud.io/mrtazz/plustache).
+
+Otherwise clone this repository and run the manual install task:
 
     git clone git://github.com/mrtazz/plustache.git
-
-Run the install tasks:
-
     autoreconf -i
     ./configure
     make
     make install
 
-Or you can get it via [homebrew](http://github.com/mxcl/homebrew):
+On OSX you can get it via [my homebrew
+tap](https://github.com/mrtazz/homebrew-oss):
 
+    brew tap mrtazz/oss
     brew install plustache
 
 ## Running the unit tests

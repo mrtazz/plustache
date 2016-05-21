@@ -1,16 +1,34 @@
 language: cpp
-script: autoreconf -i && ./configure --enable-coverage && make ci
+script:
+- autoreconf -i
+- ./configure --enable-coverage
+- make ci
+install:
+- gem install fpm
+- gem install package_cloud
 before_script:
-  - ./utils/build_gtest.sh
-  - gem install coveralls-lcov
+- ./utils/build_gtest.sh
+- gem install coveralls-lcov
 after_success:
-  - curl http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz | tar xz
-  - export PATH=$PATH:`pwd`/lcov-1.11/bin
-  - make coverage.info
-  - coveralls-lcov coverage.info
+- curl http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz | tar
+  xz
+- export PATH=$PATH:`pwd`/lcov-1.11/bin
+- make coverage.info
+- coveralls-lcov coverage.info
 sudo: false
 addons:
   apt:
     packages:
     - build-essential
     - libboost-regex-dev
+    - rpm
+    - valgrind
+deploy:
+  provider: script
+  script: ./autogen.sh && ./configure --prefix=`pwd`/usr && make deploy-packages
+  on:
+    tags: true
+    condition: $CXX = g++
+env:
+  global:
+    secure: WkzClT13gpXdjHLbdrPw3BC5COE7CC9SGAeU5hcl6T+cFS2Xs9qVmdG3LuKtWYZZCkDIa5b6iDisYrl6ZnXhboJ2sbmNDijCEHbUCj2qsqw8Txcf09LuFZYp0LkjwwjP1KLKPbe2r2v5TaHKku/cq4SroclkiNKgb0/q+H92qak=

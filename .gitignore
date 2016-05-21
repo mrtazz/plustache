@@ -37,4 +37,4 @@ coverage.info
 usr
 
 # generated files
-include/restclient-cpp/version.h
+include/plustache/version.h

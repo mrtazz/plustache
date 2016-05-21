@@ -12,7 +12,7 @@ PROJECT_URL="https://github.com/mrtazz/$(NAME)"
 FPM_FLAGS= --name $(NAME) --version $(VERSION) --iteration $(PKG_RELEASE) \
            --epoch 1 --license MIT --maintainer "$(BUILDER)" --url $(PROJECT_URL) \
            --vendor mrtazz --description "{{mustaches}} for C++" \
-           --after-install utils/runldconfig.sh --after-remove utils/runldconfig.sh \
+           --after-install utils/runldconfig.sh --after-remove utils/runldconfig.sh
 
 rpm:
 	  fpm -t rpm -s dir $(FPM_FLAGS) --depends boost-regex usr

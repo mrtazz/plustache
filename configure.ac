@@ -1,11 +1,9 @@
-#                                               -*- Autoconf -*-
-# Process this file with autoconf to produce a configure script.
-
 AC_PREREQ([2.52])
-AC_INIT([plustache], [0.1.2], [d@unwiredcouch.com])
-AM_INIT_AUTOMAKE([0.1.2 foreign subdir-objects])
+AC_INIT([plustache], [0.3.0], [d@unwiredcouch.com])
+AM_INIT_AUTOMAKE([foreign subdir-objects])
 LT_INIT
 AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for programs.
 AC_PROG_CXX
@@ -14,9 +12,6 @@ AC_PROG_INSTALL
 
 # Checks for libraries.
 AC_CHECK_LIB([boost_regex], [main])
-AC_CHECK_LIB([gtest], [main])
-
-# Checks for header files.
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_INLINE

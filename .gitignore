@@ -30,3 +30,11 @@ m4
 *gcno
 html
 coverage.info
+
+# packaging
+*.rpm
+*.deb
+usr
+
+# generated files
+include/restclient-cpp/version.h

@@ -1,6 +1,7 @@
+ACLOCAL_AMFLAGS=-I m4
 AM_CPPFLAGS = -I$(top_srcdir)/include
 LDFLAGS=-lboost_regex-mt
-pkginclude_HEADERS = include/plustache/template.hpp include/plustache/context.hpp include/plustache/plustache_types.hpp
+pkginclude_HEADERS = include/plustache/template.hpp include/plustache/context.hpp include/plustache/plustache_types.hpp include/plustache/version.h
 check_PROGRAMS = test-program
 test_program_CPPFLAGS=-Ivendor/gtest-1.7.0/include -I$(top_srcdir)/include
 test_program_LDFLAGS=-Lvendor/gtest-1.7.0/lib/.libs -lgtest -lboost_regex-mt
@@ -10,9 +11,11 @@ test_program_LDADD = .libs/libplustache.a
 
 lib_LTLIBRARIES=libplustache.la
 libplustache_la_SOURCES=src/template.cpp src/context.cpp
+libplustache_la_CXXFLAGS=-fPIC
+libplustache_la_LDFLAGS=-version-info 2:1:1
 
 
-.PHONY: test check clean-coverage-files coverage-html
+.PHONY: test check clean-coverage-files coverage-html valgrind ci
 
 test: check
 	./test-program
@@ -26,3 +29,14 @@ coverage.info: test
 
 coverage-html: coverage.info
 	genhtml -t "plustache coverage report" --legend --show-details coverage.info --output-directory html
+
+include/plustache/version.h:
+	m4 -I m4 -DM4_PLUSTACHE_VERSION=$(VERSION) version.h.m4 > $@
+
+valgrind: check
+	valgrind --leak-check=full --error-exitcode=0 ./test-program
+
+ci: test valgrind
+
+# include other make targets in the main Makefile
+include $(srcdir)/Makefile.packaging.mk

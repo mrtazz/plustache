@@ -1,0 +1,6 @@
+changecom(`@@')dnl
+#ifndef INCLUDE_PLUSTACHE_VERSION_H_
+#define INCLUDE_PLUSTACHE_VERSION_H_
+#define PLUSTACHE_VERSION "M4_PLUSTACHE_VERSION"
+#endif  // INCLUDE_PLUSTACHE_VERSION_H_
+changecom(`#')dnl

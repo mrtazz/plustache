@@ -1,4 +1,10 @@
-# plustache - mustache templates for C++ [![Build Status](https://travis-ci.org/mrtazz/plustache.svg?branch=master)](https://travis-ci.org/mrtazz/plustache)[![Coverage Status](https://coveralls.io/repos/mrtazz/plustache/badge.svg?branch=master&service=github)](https://coveralls.io/github/mrtazz/plustache?branch=master)
+# plustache - mustache templates for C++
+
+[![Build Status](https://travis-ci.org/mrtazz/plustache.svg?branch=master)](https://travis-ci.org/mrtazz/plustache)
+[![Coverage Status](https://coveralls.io/repos/mrtazz/plustache/badge.svg?branch=master&service=github)](https://coveralls.io/github/mrtazz/plustache?branch=master)
+[![Packagecloud](https://img.shields.io/badge/packagecloud-available-brightgreen.svg)](https://packagecloud.io/mrtazz/plustache)
+[![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
+
 Basic port of [mustache templating](http://mustache.github.com) to C++.
 
 ## Motivation

@@ -9,6 +9,7 @@
 #include <string>
 #include <boost/regex.hpp>
 #include <boost/algorithm/string/trim.hpp>
+#include <boost/algorithm/string/predicate.hpp>
 
 #include <plustache/plustache_types.hpp>
 #include <plustache/context.hpp>
@@ -124,7 +125,10 @@ std::string template_t::render_tags(const std::string& tmplate,
         {
             try
             {
-                repl.assign(template_t::html_escape(ctx.get(key)[0][key]));
+                if (!ctx.count("__not_to_escape"))
+                { repl.assign(template_t::html_escape(ctx.get(key)[0][key])); }
+                else
+                { repl.assign(ctx.get(key)[0][key]); }
             }
             catch(int i) { repl.assign(""); }
         }
@@ -235,6 +239,14 @@ std::string template_t::render_sections(const std::string& tmplate,
                   small_ctx = ctx;
                   small_ctx.add(*it);
                   repl += template_t::render_tags(matches[3], small_ctx);
+                }
+                if (ctx.count("__remove_trailing_comma"))
+                {
+                    boost::algorithm::trim(repl);
+                    while (boost::algorithm::ends_with(repl, ","))
+                    {
+                        repl.pop_back();
+                    }
                 }
             }
         }

@@ -124,7 +124,10 @@ std::string template_t::render_tags(const std::string& tmplate,
         {
             try
             {
-                repl.assign(template_t::html_escape(ctx.get(key)[0][key]));
+                if (!ctx.count("__not_to_escape"))
+                { repl.assign(template_t::html_escape(ctx.get(key)[0][key])); }
+                else
+                { repl.assign(ctx.get(key)[0][key]); }
             }
             catch(int i) { repl.assign(""); }
         }

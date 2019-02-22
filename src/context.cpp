@@ -131,3 +131,13 @@ PlustacheTypes::CollectionType Context::get(const std::string& key) const
   }
   return ret;
 }
+
+/**
+ *
+ * @param key
+ * @return
+ */
+int Context::count(const std::string &key) const
+{
+    return ctx.count(key);
+}
